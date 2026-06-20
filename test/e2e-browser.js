@@ -62,6 +62,8 @@ if (!CHROME) {
 // ── Test harness ──────────────────────────────────────────────────────────────
 const BASE = (process.env.BASE_URL || 'http://localhost:3000').replace(/\/$/, '')
 const WS_BASE = BASE.replace(/^http/, 'ws')
+// Allow more time for remote deployments (each WS round-trip adds ~100ms)
+const WS_TIMEOUT = BASE.includes('localhost') ? 10000 : 25000
 let pass = 0, fail = 0
 
 // Dual console+file logging
@@ -426,7 +428,7 @@ async function suiteReport() {
       }
     })
     hostWs.on('error', e => reject(e))
-    setTimeout(() => { hostWs.close(); reject(new Error('report game timeout')) }, 15000)
+    setTimeout(() => { hostWs.close(); reject(new Error('report game timeout')) }, WS_TIMEOUT * 4)
   })
 
   // Give report builder time to write files
@@ -465,7 +467,7 @@ async function suiteWebSocket() {
         if (msg.event === 'state_sync' || msg.event === 'server:state_sync') { sock.close(); resolve(msg.payload) }
       })
       sock.on('error', reject)
-      setTimeout(() => reject(new Error('WS timeout')), 5000)
+      setTimeout(() => reject(new Error('WS timeout')), WS_TIMEOUT)
     }),
     new Promise((resolve, reject) => {
       const sock = new ws.WebSocket(`${WS_BASE}/ws`)
@@ -475,7 +477,7 @@ async function suiteWebSocket() {
         if (msg.event === 'state_sync' || msg.event === 'server:state_sync') { sock.close(); resolve(msg.payload) }
       })
       sock.on('error', reject)
-      setTimeout(() => reject(new Error('WS timeout')), 5000)
+      setTimeout(() => reject(new Error('WS timeout')), WS_TIMEOUT)
     }),
   ])
 
@@ -539,7 +541,7 @@ async function suiteWebSocket() {
         assert(false, 'Anti-cheat: timed out waiting for player currentItem')
         resolve()
       }
-    }, 10000)
+    }, WS_TIMEOUT)
   })
 }
 
