@@ -12,7 +12,8 @@ const QUIZ_DIR = path.join(__dirname, 'data/quizzes')
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123'
 
 const dev = process.env.NODE_ENV !== 'production'
-const hostname = process.env.HOST || 'localhost'
+// In production (Render/Docker) bind all interfaces so health checks can reach us
+const hostname = process.env.HOST || (dev ? 'localhost' : '0.0.0.0')
 const port = parseInt(process.env.PORT || '3000', 10)
 
 const app = next({ dev, hostname, port })
