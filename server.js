@@ -176,9 +176,12 @@ app.prepare().then(() => {
       wss.handleUpgrade(req, socket, head, (ws) => {
         wss.emit('connection', ws, req)
       })
-    } else {
-      socket.destroy()
     }
+    // For all other paths (e.g. /_next/webpack-hmr), do nothing —
+    // Next.js registers its own upgrade listener on the same server
+    // and handles HMR WebSockets itself. Calling socket.destroy() here
+    // was killing the Turbopack HMR connection, which prevented React
+    // from completing hydration and blocked all useEffect calls.
   })
 
   server.listen(port, hostname, () => {
