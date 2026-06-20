@@ -570,13 +570,18 @@ async function suiteWebSocket() {
   assert(Array.isArray(hostState?.players), 'Host state includes players array')
 
   // Anti-cheat: player view must not contain correct answer fields on a question
+  // Use a fresh session so stale socket state from the health-check above can't interfere.
+  const antiCheatSession = await apiPost('/api/sessions', { quizId: 'demo-360' })
+  const antiCheatPin = antiCheatSession.body?.pin
+  if (!antiCheatPin) { assert(false, 'Anti-cheat: failed to create session'); return }
   await new Promise((resolve, reject) => {
+    const acPin = antiCheatPin
     const hostSock = new ws.WebSocket(`${WS_BASE}/ws`)
     const playerSock = new ws.WebSocket(`${WS_BASE}/ws`)
     let hostReady = false, playerReady = false, started = false, checked = false
 
     function send(sock, event) {
-      sock.send(JSON.stringify({ event, payload: { pin } }))
+      sock.send(JSON.stringify({ event, payload: { pin: acPin } }))
     }
     function tryStart() {
       if (hostReady && playerReady && !started) {
@@ -586,7 +591,7 @@ async function suiteWebSocket() {
     }
 
     hostSock.on('open', () => {
-      hostSock.send(JSON.stringify({ event: 'client:join', payload: { pin, role: 'HOST' } }))
+      hostSock.send(JSON.stringify({ event: 'client:join', payload: { pin: acPin, role: 'HOST' } }))
     })
     hostSock.on('message', raw => {
       const msg = JSON.parse(raw)
@@ -598,7 +603,7 @@ async function suiteWebSocket() {
     })
 
     playerSock.on('open', () => {
-      playerSock.send(JSON.stringify({ event: 'client:join', payload: { pin, role: 'PLAYER', nickname: 'AntiCheatBot' } }))
+      playerSock.send(JSON.stringify({ event: 'client:join', payload: { pin: acPin, role: 'PLAYER', nickname: 'AntiCheatBot' } }))
     })
     playerSock.on('message', raw => {
       const msg = JSON.parse(raw)
