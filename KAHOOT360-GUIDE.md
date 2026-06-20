@@ -1,7 +1,8 @@
 # Kahoot! 360 — Complete Operator & Player Guide
 
 This guide covers every capability of Kahoot! 360: hosting a game, playing as a participant,
-administering quizzes, and downloading reports — for all three deployment environments.
+administering quizzes, downloading reports, and verifying everything with the test suite —
+for all three deployment environments.
 
 ---
 
@@ -13,8 +14,8 @@ administering quizzes, and downloading reports — for all three deployment envi
 | **Render** | `https://kahoot-clone-ajpi.onrender.com` | ✅ | ✅ | ✅ |
 | **Vercel** | `https://funroot.vercel.app` | ❌ | ❌ (static preview only) | ✅ (login + quiz builder) |
 
-> Vercel is a serverless platform — it can show pages and handle REST API calls, but it cannot run a
-> WebSocket server. Use Local or Render for a real game session.
+> Vercel is a serverless platform — it can render pages and handle REST API calls, but it cannot
+> run a persistent WebSocket server. Use Local or Render for a real multiplayer game session.
 
 ---
 
@@ -38,7 +39,14 @@ npm run dev          # development — hot reload on port 3000
 npm run build && npm start   # production build
 ```
 
-Server starts at `http://localhost:3000`. The terminal will confirm port binding.
+Server starts at `http://localhost:3000`. Terminal confirms:
+```
+> Ready on http://localhost:3000
+> WebSocket endpoint: ws://localhost:3000/ws
+```
+
+On Render, the service starts automatically after every push to `master`.
+On Vercel, pages and REST API routes are available immediately after deploy.
 
 ---
 
@@ -48,9 +56,10 @@ Navigate to the home page (`/`) and click **Host →** next to the quiz you want
 or go directly to `/host/new` to pick from the quiz list.
 
 The app will:
-1. Create a game session (GET `/api/quizzes`, POST `/api/sessions`)
-2. Redirect to `/host/<PIN>` (e.g., `/host/869744`)
-3. Establish a WebSocket connection to `/ws`
+1. Call `GET /api/quizzes` to list available quizzes
+2. Call `POST /api/sessions` with the chosen quiz ID to create a session
+3. Redirect to `/host/<PIN>` (e.g., `/host/869744`)
+4. Open a WebSocket connection to `/ws` and send `client:join` with `role: HOST`
 
 ---
 
@@ -58,9 +67,9 @@ The app will:
 
 The lobby shows:
 - **Game PIN** (large, prominent — share this with players)
-- **Join URL** — `<base-url>/play?pin=<PIN>` — display or share this link
-- **Player list** — updates in real time as participants join
-- **Start Game** button — becomes active as soon as at least one player has joined
+- **Join URL** — `<base-url>/play?pin=<PIN>` — displayable or shareable link
+- **Player list** — updates in real time as participants join via WebSocket
+- **Start Game** button — active as soon as at least one player has joined
   (you can also start with zero players to run through slides/questions unattended)
 
 ---
@@ -85,48 +94,62 @@ The demo quiz (`Kahoot! 360 Demo`) contains one of every question type:
 
 ---
 
-### 1.5 Host controls (per question)
+### 1.5 Full state machine
 
-Every question goes through this state machine:
+Every item passes through this sequence:
 
 ```
-LOBBY → QUESTION_READING (5-second reading phase)
-         → QUESTION_ACTIVE (answer window open)
-           → RESULTS
-             → LEADERBOARD   (scored types only)
-               → next item
+LOBBY
+  └─► SLIDE ──────────────────────────────────── host:next_item ──► (next item)
+  └─► QUESTION_READING  (5-second reading phase)
+        ├── auto-advance after 5 s ──────────────────────────────► QUESTION_ACTIVE
+        └── host:skip ──────────────────────────────────────────► QUESTION_ACTIVE
+              QUESTION_ACTIVE  (answer window open; countdown timer running)
+                ├── all players answer ──────────────────────────► RESULTS (auto)
+                ├── timer expires ───────────────────────────────► RESULTS (auto)
+                └── host:skip ───────────────────────────────────► RESULTS
+                      RESULTS
+                        ├── scored type → LEADERBOARD (auto, 100 ms) → host:next_item
+                        └── unscored type → host:next_item (no LEADERBOARD)
 ```
 
-**Buttons available to the host:**
+---
 
-| Button | State it appears in | What it does |
-|--------|--------------------|----|
-| **Skip** | QUESTION_READING | Bypass the 5-second reading phase → go to QUESTION_ACTIVE immediately |
-| **Skip** | QUESTION_ACTIVE | End the answer window early → go to RESULTS |
+### 1.6 Host controls (per item)
+
+| Button | Visible in state | What it does |
+|--------|-----------------|-------------|
+| **Skip** | QUESTION_READING | Bypass the 5-second reading phase → QUESTION_ACTIVE (countdown timer starts immediately) |
+| **Skip** | QUESTION_ACTIVE | End the answer window early → RESULTS |
 | **Next** | RESULTS, LEADERBOARD, SLIDE | Advance to the next quiz item |
-| **Finish** | Any state | End the game immediately → FINISHED |
+| **Pause** | QUESTION_ACTIVE | Freeze the countdown timer; players cannot submit new answers |
+| **Resume** | PAUSED | Unfreeze the timer from where it was paused |
+| **Kick** | Any (player list) | Remove a specific player; their WebSocket closes |
+| **Finish** | Any | End the game immediately → FINISHED |
+
+**Auto-advance on all-answered**: When every connected player submits an answer, the engine immediately
+transitions to RESULTS — the countdown timer does not need to expire first.
 
 For **poll**, **wordcloud**, **brainstorm**, and **openended** types, the LEADERBOARD step
 is skipped — RESULTS goes straight to the next item (or game end).
 
 **Brainstorm** has a two-phase flow:
-1. **COLLECT** phase — players submit ideas (60 s by default)
-2. **VOTE** phase — players vote on collected ideas
-The host sees both phases and clicks Next to move between them.
+1. **COLLECT phase** — players submit ideas (60 s by default)
+2. **VOTE phase** — players vote on collected ideas; host clicks Next to move between phases
 
 ---
 
-### 1.6 Slide items (SLIDE type)
+### 1.7 Slide items
 
 A slide is display-only: no answer input, no timer, no scoring. The host dashboard shows
-the slide content and a **Next** button. Players see the slide content on their screens.
+the slide content and a **Next** button. Players see the same slide content on their screens.
 
 ---
 
-### 1.7 End of game
+### 1.8 End of game
 
 After the last item the game enters **FINISHED** state. The host screen shows:
-- Final leaderboard
+- Final leaderboard with all player scores and rankings
 - **Download Report** buttons (JSON and CSV)
 - Option to host a new game
 
@@ -138,10 +161,11 @@ After the last item the game enters **FINISHED** state. The host screen shows:
 
 1. Go to `/play` (or `<base-url>/play`)
 2. Enter the 6-digit **Game PIN** shown on the host screen
-3. Enter your **Nickname**
+3. Enter your **Nickname** (must be unique in the current session)
 4. Click **Join**
 
-The player is held in a waiting lobby until the host starts the game.
+The player enters a waiting lobby. The host's player list updates in real time.
+Once the host clicks **Start Game**, the game transitions automatically on every player's screen.
 
 ---
 
@@ -149,15 +173,15 @@ The player is held in a waiting lobby until the host starts the game.
 
 | Question type | How to answer |
 |---------------|---------------|
-| **quiz** | Tap / click one or more answer tiles (multiple-choice) |
-| **truefalse** | Tap **True** or **False** |
-| **typeAnswer** | Type your answer in the text field and submit |
-| **slider** | Drag the slider to your numeric estimate and submit |
-| **puzzle** | Drag tiles into the correct order and submit |
-| **poll** | Tap your preferred option (unscored — no right/wrong) |
-| **wordcloud** | Type a word or short phrase and submit |
-| **brainstorm** | Submit ideas during COLLECT phase; vote on ideas during VOTE phase |
-| **openended** | Type a free-text answer and submit |
+| **quiz** | Tap / click one or more answer tiles (multi-select); then click **Submit** |
+| **truefalse** | Tap **True** or **False** — submits immediately |
+| **typeAnswer** | Type your answer in the text field and click **Submit** |
+| **slider** | Drag the slider to your numeric estimate and click **Submit** |
+| **puzzle** | Drag tiles into the correct order and click **Submit** |
+| **poll** | Tap your preferred option — submits immediately (unscored) |
+| **wordcloud** | Type a word or short phrase and click **Submit** (unscored) |
+| **brainstorm** | COLLECT phase: submit multiple ideas; VOTE phase: tap to upvote ideas (unscored) |
+| **openended** | Type a free-text response and click **Submit** (unscored) |
 
 ---
 
@@ -169,33 +193,80 @@ Scored types: **quiz**, **truefalse**, **typeAnswer**, **slider**, **puzzle**
 basePoints = round(multiplier × 1000 × max(0, 1 − t / 2T))
 ```
 
-Where `t` = elapsed time, `T` = question time limit, `multiplier` = 1 (default).
-Faster correct answers score more.
+Where `t` = elapsed time since QUESTION_ACTIVE began, `T` = question time limit, `multiplier` = 1 (default).
 
-**Streak bonuses** (consecutive correct answers):
-- 2 correct in a row: +100
-- 3 in a row: +200
-- 4 in a row: +300
-- 5+ in a row: +500
+**In practice with a 20-second question:**
 
-Unscored types: **poll**, **wordcloud**, **brainstorm**, **openended** — participation only.
+| Answer time | Base points |
+|-------------|------------|
+| 0 ms (instant) | 1000 |
+| 1500 ms | ~975 |
+| 3000 ms | ~950 |
+| 10000 ms (half-time) | ~750 |
+| 20000 ms (buzzer) | 500 |
+| After timer | 0 |
+
+**Streak bonuses** (consecutive correct answers add to base points):
+
+| Streak | Bonus |
+|--------|-------|
+| 2 in a row | +100 |
+| 3 in a row | +200 |
+| 4 in a row | +300 |
+| 5+ in a row | +500 |
+
+Example: A player who answers Q1 correctly (1000 pts) and Q2 correctly at 0 ms earns
+1000 + 100 (streak bonus) = **1100 pts** for Q2 alone.
+
+Unscored types: **poll**, **wordcloud**, **brainstorm**, **openended** — participation is recorded
+but no points are awarded.
 
 ---
 
-### 2.4 Anti-cheat
+### 2.4 Per-player score isolation
 
-The server sends different payloads to hosts and players:
-- **Host**: receives full question data including correct answers
-- **Players**: receive question without `text`, `correctIndices`, `correctIndex`,
-  `acceptedAnswers`, `correctValue`, `correctOrder` — answers cannot be read from
-  the WebSocket traffic
+Each player's score feedback is sent privately. The `server:player_result` event is routed
+exclusively to the answering player's WebSocket socket via `SOCKET:<id>` targeting — no other
+player, including the host, receives another player's result in transit.
+
+What each party receives after an answer window closes:
+- **Each player** gets `server:player_result` with `{ isCorrect, pointsEarned, streak, totalScore }` — their own result only
+- **Host** gets `server:answer_tally` with aggregate counts (how many answered correctly)
+- **Everyone** (host + all players) gets `server:leaderboard` with the ranked standings
 
 ---
 
-### 2.5 Leaderboard
+### 2.5 Anti-cheat
 
-After each scored question, players see their current rank and total score.
-The host sees the full leaderboard with all player names and scores.
+The server sends structurally different payloads to hosts and players:
+
+- **Host** receives the full item including `text`, `correctIndices`, `correctIndex`,
+  `acceptedAnswers`, `correctValue`, `correctOrder`
+- **Players** receive the same item with all of those fields stripped — correct answers
+  cannot be read from WebSocket traffic even with a network inspector
+
+---
+
+### 2.6 Leaderboard
+
+After each **scored** question:
+- Players see their current rank and total cumulative score
+- Host sees the full ranked leaderboard with all player names and scores
+
+After **unscored** questions (poll, wordcloud, brainstorm, openended):
+- No leaderboard is shown; the game advances directly to the next item
+
+---
+
+### 2.7 Reconnecting mid-game
+
+If a player's connection drops:
+1. Go to `/play` and enter the same PIN and the **same nickname**
+2. The engine recognises the nickname and reattaches the existing player record
+3. Total score, current streak, and answer history are fully preserved
+
+If a player tries to join with a nickname that is already connected, they are blocked with an error
+until the original socket disconnects.
 
 ---
 
@@ -207,8 +278,10 @@ Navigate to `/admin` on any environment.
 
 **Login**
 - Password: `admin123` (or value of `ADMIN_PASSWORD` env var)
-- On Vercel: login works; quiz builder works; creating sessions does not start real games
-  (no WebSocket)
+- Credentials are stored in `sessionStorage` (cleared on tab close)
+
+> On Vercel: login works; quiz builder works; but created sessions do not start real games
+> because there is no persistent WebSocket server.
 
 ---
 
@@ -217,26 +290,27 @@ Navigate to `/admin` on any environment.
 After login the admin dashboard shows:
 - List of all quizzes (title, ID, item count)
 - **New Quiz** button → opens the quiz builder at `/admin/quiz/new`
-- **Edit** link per quiz → opens builder pre-loaded with existing quiz
-- **Delete** button per quiz → removes quiz file and unloads from engine
+- **Edit** link per quiz → opens builder pre-loaded with the existing quiz data
+- **Delete** button per quiz → removes the JSON file and evicts the quiz from the in-memory engine
 
 ---
 
-### 3.3 Quiz builder (`/admin/quiz/new`)
+### 3.3 Quiz builder (`/admin/quiz/new` or `/admin/quiz/<id>`)
 
 Fill in:
+
 | Field | Required | Notes |
 |-------|----------|-------|
-| Quiz ID | Yes | Alphanumeric + hyphens; used as filename |
+| Quiz ID | Yes | Alphanumeric + hyphens; used as the filename (`data/quizzes/<id>.json`) |
 | Title | Yes | Shown on home page and in reports |
-| Description | No | Shown on home page |
+| Description | No | Shown on home page below the title |
 
 Then add items. Each item has:
 - **Type** — pick from the dropdown (all 10 types supported)
 - **Question text**
 - **Time limit** (seconds)
 - **Points multiplier** (1× default)
-- Type-specific fields (answer choices, correct answers, slider min/max, etc.)
+- Type-specific fields: answer choices and correct answer(s) for quiz/truefalse/typeAnswer; range and correct value for slider; blocks and correct order for puzzle; options for poll; nothing extra for wordcloud/openended
 
 Click **Save Quiz**. The quiz is written to `data/quizzes/<id>.json` and immediately
 available for hosting without restarting the server.
@@ -246,7 +320,7 @@ available for hosting without restarting the server.
 ### 3.4 Hot-reload
 
 The engine reloads the quiz catalog on every admin save (`engine.reloadQuiz(quiz)`).
-Existing in-progress game sessions are unaffected; the new quiz data applies to new sessions.
+Existing in-progress game sessions are unaffected; the new quiz data applies to new sessions only.
 
 ---
 
@@ -257,7 +331,7 @@ Reports are generated at the end of every finished game session.
 ### 4.1 Downloading reports from the host UI
 
 At the FINISHED screen, click:
-- **Download JSON** — full session data including all answers, scores, timing
+- **Download JSON** — full session data including all answers, scores, and timing
 - **Download CSV** — flat spreadsheet with one row per player per question
 
 ### 4.2 Report API
@@ -267,8 +341,8 @@ GET /api/report/<PIN>/json
 GET /api/report/<PIN>/csv
 ```
 
-Reports are available immediately after the game finishes. They are written to a temp
-directory and survive until the server restarts.
+Reports are available immediately after `host:finish` transitions the session to FINISHED.
+They are written to a temp directory and survive until the server restarts.
 
 **Example (local):**
 ```bash
@@ -281,139 +355,188 @@ curl http://localhost:3000/api/report/869744/csv
 curl https://kahoot-clone-ajpi.onrender.com/api/report/<PIN>/json
 ```
 
-> On Vercel, reports are not available (no completed WS sessions possible).
+> On Vercel, reports are not available — no full game sessions can complete without WebSocket.
+
+### 4.3 Report contents
+
+The JSON report includes:
+- Session metadata (quiz ID, title, PIN, player count, start/end timestamps)
+- Per-question aggregations: correct count, incorrect count, response count, average score, knowledge gap flag (< 35% correct rate)
+- Per-player history: for each question, the answer submitted, whether it was correct, points earned, streak at that moment, and response time in ms
+
+The CSV report has one row per (player, question) pair with the same fields as columns.
 
 ---
 
 ## Part 5: Running the test suite
 
-All test scripts accept `BASE_URL` to point at any deployment.
+All test scripts accept `BASE_URL` to point at any deployment. The dev server must be running for local tests.
+
+### 5.1 E2E browser suite
 
 ```bash
-# Local (default)
-node test/e2e-browser.js
+# Start the server first (local only)
+npm run dev
 
-# Render
-BASE_URL=https://kahoot-clone-ajpi.onrender.com node test/e2e-browser.js
-
-# Vercel (WS suites auto-skipped)
-BASE_URL=https://funroot.vercel.app node test/e2e-browser.js
-
-# Individual phase tests
-node test/phase2-integration.js
-node test/phase3-scoring.js
-node test/phase5-player.js
-node test/phase6-unscored.js
-node test/phase7-analytics.js
-node test/phase8-admin.js
-
-# All phases at once
-npm run test:api
+# Run the suite against each environment
+node test/e2e-browser.js                                              # local
+BASE_URL=https://kahoot-clone-ajpi.onrender.com node test/e2e-browser.js   # Render
+BASE_URL=https://funroot.vercel.app node test/e2e-browser.js               # Vercel
 ```
 
 Expected results:
+
 | Target | Passed | Failed | Skipped |
 |--------|--------|--------|---------|
-| Local | 41 | 0 | — |
-| Render | 41 | 0 | — |
-| Vercel | 18 | 0 | 4 |
+| Local | 80 | 0 | — |
+| Render | 80 | 0 | — |
+| Vercel | 18 | 0 | 5 (no WS) |
+
+**Suite descriptions:**
+
+| Suite | Assertions | What it verifies |
+|-------|-----------|-----------------|
+| 1 — HTTP + API Smoke | 10 | REST endpoints (`/`, `/play`, `/admin`, `/host/new`, `/api/quizzes`, `/api/sessions`, `/api/admin/login`) return correct status codes |
+| 2 — Home Page | 5 | Quiz picker renders, quiz card title appears after hydration, Host button and PIN input visible, no JS errors |
+| 3 — Host Flow | 5 | Real browser creates a session, redirects to `/host/<PIN>`, lobby badge and PIN appear on screen |
+| 4 — Multiplayer Flow | 21 | 3 simultaneous Playwright browsers join with different nicknames, all see the gas-giants question options, Alice submits correct multi-select (Jupiter + Saturn), Bob submits wrong (Mars), Alice sees positive pts, Bob sees 0 pts |
+| 5 — Admin Page | 3 | Login succeeds, quiz dashboard renders, quiz builder renders |
+| 6 — Report API | 5 | JSON and CSV endpoints return 200 with correct content-type after a finished game |
+| 7 — WebSocket Health | 6 | WS connection + LOBBY handshake; fresh session confirms anti-cheat: player payload has no `correctIndices`, `correctIndex`, `acceptedAnswers`, `correctValue`, `correctOrder`, or `text` |
+| 8 — Multi-Player Score Tracking | 25 | 3 concurrent WS players with predetermined answers and delays — per-player result isolation (each receives only their own `server:player_result`), time-based score ordering (Alice 0 ms → 1000 pts > Bob 1500 ms → 975 pts at Q1), streak bonus on Q2 (Alice: 1000 + 100 = 1100 pts), auto-advance after all 3 answer, leaderboard after each scored question, final distinct scores in descending order |
+
+### 5.2 Phase API tests
+
+```bash
+# All phases at once
+npm run test:api
+
+# Individual phases
+node test/phase2-integration.js   # 27 assertions: WebSocket E2E, anti-cheat, pause/resume
+node test/phase3-scoring.js       # 55 assertions: all evaluators, boundary cases, streak bonuses
+node test/phase5-player.js        #  8 assertions: reconnect, duplicate nickname, kick, pause
+node test/phase6-unscored.js      # 14 assertions: poll, wordcloud, brainstorm, openended, reveal
+node test/phase7-analytics.js     # 24 assertions: JSON/CSV report, knowledge gaps, download API
+node test/phase8-admin.js         # 24 assertions: auth, CRUD, hot-reload, file persistence
+```
+
+Total: **152 assertions, 0 failures** across all phase tests.
 
 ---
 
 ## Part 6: Step-by-step walkthrough (all question types)
 
-This section is a complete host+player run-through of the demo quiz.
+This is a complete host + 3 player run-through of the demo quiz.
 
 ### Setup
 
 **Host (browser A):** Open `http://localhost:3000` → click **Host →** next to
 "Kahoot! 360 Demo". Note the PIN (e.g., `123456`).
 
-**Player (browser B / mobile):** Open `http://localhost:3000/play` → enter PIN `123456` →
-enter nickname → **Join**.
+**Players (browsers B, C, D):** Each opens `http://localhost:3000/play` → enters PIN `123456` →
+enters a unique nickname → clicks **Join**.
 
-Host sees the player appear in the lobby. Click **Start Game**.
+Host sees all 3 players appear in the lobby list. Click **Start Game**.
 
 ---
 
 ### Item 1 — SLIDE: Welcome
 
-- Host: Slide content displayed. Click **Next** to proceed.
-- Player: Sees the same slide. No input required.
+- **Host**: Slide content displayed. Click **Next** to proceed.
+- **Players**: All see the same slide content. No input required.
 
 ---
 
-### Item 2 — Quiz: Gas giants
+### Item 2 — Quiz: Gas giants (20 s, multi-select)
 
-- **Reading phase (5 s)**: Both see the question. Host can click **Skip** to bypass.
-- **Active phase (20 s)**: Player taps the correct answer tiles. A progress bar counts down.
-- **Results**: Correct answers highlighted. Score and streak shown.
-- **Leaderboard**: Rankings displayed. Host clicks **Next**.
+- **Reading phase (5 s)**: Both host and players see the question. Host can click **Skip** to bypass.
+- **Active phase (20 s)**: Each player independently selects option tiles and clicks **Submit**.
+  - Faster correct answers earn more points. Answering at 0 ms earns 1000 pts; at 10 s earns ~750 pts.
+  - If all players submit before the 20 s timer, the engine auto-advances to RESULTS immediately.
+- **Results**: Correct answers highlighted on host screen. Host sees how many players answered correctly.
+- **Leaderboard**: Each player sees their own rank and score. Host sees all rankings. Click **Next**.
 
 ---
 
-### Item 3 — True/False: Great Wall
+### Item 3 — True/False: Great Wall (15 s)
 
-- Reading phase → Active (15 s): Player taps **True** or **False**.
+- Active phase: each player taps **True** or **False**.
+- A player who was correct on Q2 AND correct here earns a streak bonus of +100.
 - Results → Leaderboard → Next.
 
 ---
 
-### Item 4 — Type Answer: Capital of France
+### Item 4 — Type Answer: Capital of France (30 s)
 
-- Player types `Paris` (fuzzy match: `Pari`, `paris` also accepted — Levenshtein ≤ 1).
-- Results show accepted answers. Leaderboard → Next.
-
----
-
-### Item 5 — Slider: Berlin Wall year
-
-- Player drags slider to `1989`. Closer to the correct value scores more points.
-- Results show correct value and player estimates. Leaderboard → Next.
+- Player types a word. Accepted answers include exact match and within 1 edit distance:
+  - `Paris` ✓ `paris` ✓ `Pari` ✓ (one deletion) `Pariss` ✓ (one insertion)
+- Results show all accepted variants. Leaderboard → Next.
 
 ---
 
-### Item 6 — Puzzle: Chronological order
+### Item 5 — Slider: Berlin Wall year (30 s)
 
-- Player drags tiles into the correct sequence and submits.
-- Exact order required for full points. Leaderboard → Next.
-
----
-
-### Item 7 — Poll: Learning format
-
-- Player selects a preference. **No scoring** — just aggregated bar chart for host.
-- Results show distribution. No leaderboard. Host clicks **Next**.
+- Player drags the slider to their estimate. The correct value is `1989`.
+- Proximity scoring: exact hit → 1000 pts; off by tolerance → proportionally less.
+- Results show the correct value and each player's estimate. Leaderboard → Next.
 
 ---
 
-### Item 8 — Word Cloud: One word
+### Item 6 — Puzzle: Chronological order (45 s)
 
-- Player types a single word. Words aggregated into a cloud on the host screen.
+- Players drag tiles into the sequence they believe is correct and click **Submit**.
+- Only an exact match of the full `correctOrder` earns points.
+- Results show the correct order. Leaderboard → Next.
+
+---
+
+### Item 7 — Poll: Learning format (20 s, unscored)
+
+- Player selects one option. No right or wrong answer — this is for gathering opinions.
+- Results show the vote distribution as a bar chart on the host screen.
+- No leaderboard (unscored type). Host clicks **Next**.
+
+---
+
+### Item 8 — Word Cloud: One word (20 s, unscored)
+
+- Player types a single word and submits. Words are aggregated by frequency.
+- Host sees an animated word cloud where more common words appear larger.
 - No scoring. Host clicks **Next**.
 
 ---
 
-### Item 9 — Brainstorm: Team collaboration
+### Item 9 — Brainstorm: Team collaboration (60 s + vote, unscored)
 
-- **COLLECT phase (60 s)**: Players submit multiple ideas.
-- Host clicks **Next** (or waits for timer) → **VOTE phase**: players vote on submitted ideas.
-- Host clicks **Next** after voting. No scoring. Results show top-voted ideas.
+- **COLLECT phase (60 s)**: Players submit as many ideas as they like.
+- When the timer expires (or host clicks **Next**): game enters **VOTE phase**.
+  Players see all submitted ideas and can upvote each one.
+- Host clicks **Next** after voting. Results show top-voted ideas as sticky notes.
+- No scoring. Host clicks **Next**.
 
 ---
 
-### Item 10 — Open Ended: Learn more about
+### Item 10 — Open Ended: Learn more about (60 s, unscored)
 
-- Player types a free-text response. All responses shown on host screen.
+- Player types a free-text response and submits.
+- Host screen shows all responses as they come in.
 - No scoring. Host clicks **Next** → game ends.
 
 ---
 
-### End of game
+### End of game (FINISHED)
 
-Host sees final leaderboard and report download buttons. Click:
-- **Download JSON** — save full session data
-- **Download CSV** — open in Excel/Sheets
+Host screen shows the final leaderboard with all player ranks and total scores.
+
+Download buttons:
+- **Download JSON** — full session data for programmatic analysis
+- **Download CSV** — open in Excel, Google Sheets, etc.
+
+```bash
+# Alternatively fetch directly:
+curl http://localhost:3000/api/report/<PIN>/json | python3 -m json.tool
+curl http://localhost:3000/api/report/<PIN>/csv
+```
 
 ---
 
@@ -422,28 +545,37 @@ Host sees final leaderboard and report download buttons. Click:
 ### Local
 
 - Port: 3000 (configurable via `PORT` env var)
-- Host binding: `localhost` in dev, `0.0.0.0` in production
-- Quiz files: `data/quizzes/*.json` (editable while server is running)
-- Logs: `logs/app.log` and `logs/e2e.log`
-- Reports: `data/reports/` (created after game finishes)
+- Host binding: `localhost` in dev, `0.0.0.0` in production (`npm start`)
+- Quiz files: `data/quizzes/*.json` — editable while server is running; saved via `/admin` hot-reloads immediately
+- Logs: `logs/app.log` (server) and `logs/e2e.log` (E2E test output)
+- Reports: `data/reports/` (created after every finished game)
 - Snapshots: `data/snapshots/` (written after every state change)
 
 ### Render (`https://kahoot-clone-ajpi.onrender.com`)
 
-- Git-based Node.js service; auto-deploys on push to `master`
+- Git-based Node.js service; auto-deploys on every push to `master`
 - Build command: `npm install && npm run build`
-- Start command: `node server.js`
-- Binds `0.0.0.0:10000` (Render assigns port via `PORT` env var)
-- Logs: `/tmp/kahoot-app.log` (ephemeral; clears on restart)
-- Reports: `/tmp/kahoot360-reports/` (ephemeral)
-- Free tier may sleep after inactivity — first request may take ~30 s to wake
+- Start command: `npm start`
+- Binds `0.0.0.0` on the `PORT` assigned by Render (typically 10000)
+- Logs: ephemeral — accessible in the Render dashboard during the session
+- Reports: written to `/tmp/` — ephemeral; cleared on every restart
+- Snapshots: written to `/tmp/` — ephemeral
+- Free tier may sleep after inactivity; the first request after sleep may take ~30 s
+- To manually trigger a deploy via the Render API:
+  ```bash
+  curl -X POST https://api.render.com/v1/services/<SERVICE_ID>/deploys \
+    -H "Authorization: Bearer $RENDER_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"clearCache":"do_not_clear"}'
+  ```
 
 ### Vercel (`https://funroot.vercel.app`)
 
 - Serverless Next.js deployment — no persistent process
-- Pages and REST API work; WebSocket does not
-- `/api/quizzes` returns the bundled `demo-360.json`
-- `/api/sessions` returns a placeholder PIN (no real game state)
-- Admin login and quiz builder UI work; saving a quiz writes to the function's temp
-  filesystem which is discarded at the end of the request
-- Use for UI previews and static feature review only; run games on Local or Render
+- Pages and REST API routes work; WebSocket server does not run
+- `/api/quizzes` falls back to the bundled `demo-360.json` (static ES module import)
+- `/api/sessions` returns a randomly generated placeholder PIN; no real game state is created
+- Admin login and quiz builder UI work; quiz saves go to the function's ephemeral temp filesystem
+  and are discarded at the end of the serverless invocation
+- WS-dependent E2E suites (4, 7, 8) are automatically skipped when `BASE_URL` points at Vercel
+- Use for UI review and admin quiz-builder testing only; run real games on Local or Render

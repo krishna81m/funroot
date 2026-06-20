@@ -1,6 +1,6 @@
 # Kahoot! 360
 
-An enterprise-grade interactive quiz platform clone built with Next.js 16 (App Router), Tailwind CSS v4, and a custom Node.js WebSocket server — all in a single process, no database required.
+An enterprise-grade interactive quiz platform built with Next.js 16 (App Router), Tailwind CSS v4, and a custom Node.js WebSocket server — all in a single process, no database required.
 
 ---
 
@@ -10,12 +10,13 @@ An enterprise-grade interactive quiz platform clone built with Next.js 16 (App R
 2. [Prerequisites](#prerequisites)
 3. [Installation](#installation)
 4. [Running Locally](#running-locally)
-5. [Manual Browser Verification](#manual-browser-verification)
-6. [Automated Test Suite](#automated-test-suite)
-7. [Question Types Reference](#question-types-reference)
-8. [Admin Quiz Builder](#admin-quiz-builder)
-9. [Project Structure](#project-structure)
-10. [Environment Variables](#environment-variables)
+5. [Deployments](#deployments)
+6. [Manual Browser Verification](#manual-browser-verification)
+7. [Automated Test Suite](#automated-test-suite)
+8. [Question Types Reference](#question-types-reference)
+9. [Admin Quiz Builder](#admin-quiz-builder)
+10. [Project Structure](#project-structure)
+11. [Environment Variables](#environment-variables)
 
 ---
 
@@ -38,17 +39,20 @@ An enterprise-grade interactive quiz platform clone built with Next.js 16 (App R
 - **In-memory state**: All game sessions live in a `Map<pin, GameSession>` — no database
 - **Thread safety**: All `GameEngine` mutations are synchronous (Node.js single-threaded event loop; no `await` gaps in critical sections)
 - **Snapshot audit trail**: Every state change writes a JSON snapshot to `data/snapshots/<pin>.json` via a per-session serialized write queue
-- **Anti-cheat**: Host receives full question data; players receive only the widget descriptor (options without correct answers)
+- **Anti-cheat**: Host receives full question data; players receive only the widget descriptor — correct-answer fields (`text`, `correctIndices`, `correctIndex`, `acceptedAnswers`, `correctValue`, `correctOrder`) are stripped before the payload leaves the server
+- **Per-player score isolation**: `server:player_result` events are routed exclusively to each answering player's socket via `broadcast(pin, event, payload, 'SOCKET:<id>')` — no player can see another's score or correctness in transit
+- **Auto-advance**: When every connected player has submitted an answer, the engine immediately closes the answer window and transitions to RESULTS without waiting for the timer to expire
 - **Quiz catalog**: JSON files in `data/quizzes/` — hot-reloadable without restart via the `/admin` UI
 
 ---
 
 ## Prerequisites
 
-| Tool | Minimum version |
-|------|----------------|
-| Node.js | 18+ (tested on v24) |
-| npm | 9+ |
+| Tool | Minimum version | Notes |
+|------|----------------|-------|
+| Node.js | 18+ (tested on v24) | |
+| npm | 9+ | |
+| Google Chrome | any recent | Required for the E2E browser suite (Playwright) |
 
 ---
 
@@ -68,9 +72,9 @@ npm install
 npm run dev
 ```
 
-The server starts on **http://localhost:3000** with hot-reload enabled.
+The server starts on **http://localhost:3000** with Turbopack hot-reload enabled.
 
-You will see:
+Terminal output:
 ```
 > Ready on http://localhost:3000
 > WebSocket endpoint: ws://localhost:3000/ws
@@ -83,25 +87,54 @@ npm run build && npm start
 
 ---
 
+## Deployments
+
+| Environment | URL | WebSocket | Full game | Admin |
+|-------------|-----|-----------|-----------|-------|
+| **Local** | `http://localhost:3000` | ✅ | ✅ | ✅ |
+| **Render** | `https://kahoot-clone-ajpi.onrender.com` | ✅ | ✅ | ✅ |
+| **Vercel** | `https://funroot.vercel.app` | ❌ | ❌ (UI preview only) | ✅ (login + quiz builder) |
+
+### Render
+
+Git-based Node.js service; auto-deploys on every push to `master`.
+
+- Build command: `npm install && npm run build`
+- Start command: `npm start`
+- Port assigned by Render via the `PORT` env var; server binds `0.0.0.0`
+- Reports and snapshots live in `/tmp/` (ephemeral — cleared on restart)
+- Free tier may sleep after inactivity; first request can take ~30 s to wake
+
+### Vercel
+
+Serverless Next.js deployment — no persistent process, no WebSocket.
+
+- `/api/quizzes` returns the bundled `demo-360.json` (static import fallback when the engine can't load)
+- `/api/sessions` returns a placeholder PIN; no real game state is created
+- Admin login and quiz builder UI work; quiz saves go to the function's temp filesystem and are discarded at request end
+- Use for UI previews and admin quiz-builder testing only; run real games on Local or Render
+
+---
+
 ## Manual Browser Verification
 
-Open two browser windows side by side — one for the **host**, one for a **player**.
+Open at least two browser windows — one for the **host**, one or more for **players**.
 
 ### Step 1 — Host: Create a Session
 
 1. Navigate to **http://localhost:3000**
-2. Select the `Kahoot! 360 Demo` quiz from the dropdown
-3. Click **Host Game**
-4. You land on `/host/<PIN>` — the lobby screen showing the 6-digit PIN
+2. Click **Host →** next to the `Kahoot! 360 Demo` quiz
+3. You land on `/host/<PIN>` — the lobby screen showing a 6-digit PIN
+4. Share the PIN or the displayed join URL (`/play?pin=<PIN>`) with players
 
-### Step 2 — Player: Join
+### Step 2 — Players: Join
 
-1. Navigate to **http://localhost:3000/play** (second window / tab / device)
-2. Enter the **PIN** from the host screen
-3. Enter a nickname and click **Join**
-4. You appear in the host's player list in real time
+1. Navigate to **http://localhost:3000/play** in each player's tab or device
+2. Enter the **PIN** shown on the host screen
+3. Enter a unique nickname and click **Join**
+4. Each player appears in the host's lobby list in real time
 
-> Add 2–3 more players in extra tabs to test the multiplayer scoring and leaderboard.
+> Open 3 or more player tabs to verify multiplayer scoring. Each player's score is tracked independently — faster correct answers earn more base points, and consecutive correct answers earn streak bonuses. When all players have answered, the engine auto-advances to RESULTS without waiting for the timer.
 
 ### Step 3 — Run the Game
 
@@ -109,26 +142,28 @@ Use the host dashboard to step through every question type in the demo quiz:
 
 | # | Type | What to verify |
 |---|------|---------------|
-| 1 | **SLIDE** | Host sees title + markdown content; players see a waiting screen |
-| 2 | **quiz** (multi-select) | Player selects options; host sees live bar chart after timer |
-| 3 | **truefalse** | Player sees True/False buttons |
-| 4 | **typeAnswer** | Player types free text; fuzzy match (Levenshtein ≤ 1) accepts near-misses like "Pari" |
-| 5 | **slider** | Player drags slider; proximity scoring (tolerance window) |
-| 6 | **puzzle** | Player drag-sorts blocks into correct order |
-| 7 | **poll** | No points; host sees real-time bar chart |
-| 8 | **wordcloud** | Host sees animated word cloud canvas |
-| 9 | **brainstorm** | COLLECT phase → host clicks Reveal → VOTE phase with sticky notes |
-| 10 | **openended** | Free text; host sees all responses, no scoring |
+| 1 | **SLIDE** | Host sees title + content; all players see the same slide; no input |
+| 2 | **quiz** (multi-select) | Each player selects option tiles independently; faster correct answer scores more; host sees live bar chart |
+| 3 | **truefalse** | Player sees True/False buttons; after 2 consecutive correct answers the streak bonus (+100) applies |
+| 4 | **typeAnswer** | Player types free text; fuzzy match accepts near-misses like "Pari" or "paris" (Levenshtein ≤ 1) |
+| 5 | **slider** | Player drags slider; proximity scoring — exact hit = 100%, off by tolerance = proportional |
+| 6 | **puzzle** | Player drag-sorts tiles into correct order; exact sequence required for full points |
+| 7 | **poll** | No scoring; all votes aggregated into bar chart the host sees |
+| 8 | **wordcloud** | Player types one word; host sees animated word cloud |
+| 9 | **brainstorm** | COLLECT phase (players submit ideas) → host clicks Next → VOTE phase (players upvote submitted ideas) |
+| 10 | **openended** | Free text; host sees all responses; no scoring |
 
-**Controls available to the host during a game:**
+**Host controls during a game:**
 
-| Button | Effect |
-|--------|--------|
-| Start Game | Transitions lobby → first item |
-| Next | Advances to next item |
-| Skip | Skips current item (safe in any state) |
-| Pause / Resume | Freezes timer and player inputs |
-| Kick | Removes a specific player |
+| Button | Visible in state | Effect |
+|--------|-----------------|--------|
+| Start Game | LOBBY | Transitions to the first quiz item |
+| Skip | QUESTION_READING | Bypass the 5-second reading phase → QUESTION_ACTIVE (countdown timer starts immediately) |
+| Skip | QUESTION_ACTIVE | End the answer window early → RESULTS |
+| Next | RESULTS, LEADERBOARD, SLIDE | Advance to the next item |
+| Pause / Resume | QUESTION_ACTIVE | Freeze / unfreeze the countdown timer and block new player submissions |
+| Kick | Any (player list) | Remove a specific player; their socket closes and they are removed from the leaderboard |
+| Finish | Any | End the game immediately → FINISHED state |
 
 ### Step 4 — Leaderboard and Report
 
@@ -138,35 +173,69 @@ Use the host dashboard to step through every question type in the demo quiz:
    - JSON: `http://localhost:3000/api/report/<PIN>/json`
    - CSV: `http://localhost:3000/api/report/<PIN>/csv`
 
-The report includes per-question aggregation, knowledge gap flags (< 35% correct rate), and per-player answer history.
+The report includes per-question aggregation, knowledge gap flags (questions with < 35% correct rate), and a complete per-player answer history with timing and points.
 
 ### Step 5 — Reconnect Test
 
-1. While a game is in progress, **close the player tab** and reopen it
+1. While a game is in progress, **close a player tab** and reopen it
 2. Go to `/play`, enter the same PIN and **same nickname**
-3. The player rejoins with their score and streak intact
+3. The player rejoins instantly — their total score, current streak, and answer history are fully preserved
 
 ---
 
 ## Automated Test Suite
 
-All tests run against the **live dev server** — start it first, then run tests in a separate terminal.
+All tests run against the **live dev server** — start it first, then run tests in a second terminal.
 
 ```bash
 # Terminal 1
 npm run dev
-
-# Terminal 2 — run all phases
-for f in test/phase{2,3,5,6,7,8}-*.js; do
-  echo ""
-  echo "=== $f ==="
-  node "$f"
-done
 ```
 
-Or run individual phases:
+### E2E browser suite (covers everything end-to-end)
+
+Requires Google Chrome at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`.
+Suites 4, 7, and 8 use real WebSocket connections; they are automatically skipped on Vercel.
 
 ```bash
+# Local (default)
+node test/e2e-browser.js
+
+# Render
+BASE_URL=https://kahoot-clone-ajpi.onrender.com node test/e2e-browser.js
+
+# Vercel (WebSocket suites auto-skipped)
+BASE_URL=https://funroot.vercel.app node test/e2e-browser.js
+```
+
+Expected results:
+
+| Target | Passed | Failed | Skipped |
+|--------|--------|--------|---------|
+| Local | 80 | 0 | — |
+| Render | 80 | 0 | — |
+| Vercel | 18 | 0 | 5 |
+
+**What each suite covers:**
+
+| Suite | Name | Assertions | What it verifies |
+|-------|------|-----------|-----------------|
+| 1 | HTTP + API Smoke | 10 | All REST endpoints return correct status codes and response shapes |
+| 2 | Home Page | 5 | Quiz picker renders with correct title and controls; no JS errors |
+| 3 | Host Flow | 5 | Full lobby creation in a real browser; PIN visible on screen |
+| 4 | Multiplayer Flow | 21 | 3 simultaneous browser players join, see quiz options, submit answers; Alice (correct multi-select) sees positive points; Bob (wrong) sees 0 pts; Charlie's UI is verified independently |
+| 5 | Admin Page | 3 | Login, quiz dashboard, and quiz builder UI all render |
+| 6 | Report API | 5 | JSON + CSV download endpoints return 200 with correct content-type after a finished game |
+| 7 | WebSocket Health | 6 | WS connection handshake; LOBBY state_sync; anti-cheat projection confirmed — correct-answer fields absent from player payload |
+| 8 | Multi-Player Score Tracking | 25 | 3 concurrent WS players with predetermined answer timing — per-player result isolation, time-based score ordering (Alice 1000 > Bob 975 at Q1), streak bonus on Q2 (+100 → 1100), auto-advance when all 3 players answer, leaderboard after each scored question, final scores distinct and in descending order |
+
+### Phase API tests (deep per-subsystem assertions)
+
+```bash
+# All phases at once
+npm run test:api
+
+# Individual phases
 node test/phase2-integration.js   # 27 assertions — WebSocket E2E, anti-cheat, pause/resume
 node test/phase3-scoring.js       # 55 assertions — all evaluators, boundary cases, streak bonuses
 node test/phase5-player.js        #  8 assertions — reconnect, duplicate nickname, kick, pause
@@ -175,79 +244,57 @@ node test/phase7-analytics.js     # 24 assertions — JSON/CSV report, knowledge
 node test/phase8-admin.js         # 24 assertions — auth, CRUD, hot-reload, file persistence
 ```
 
-**Expected output (all passing):**
+Total phase assertions: **152, 0 failures**.
 
-```
-=== Phase 2: Socket Layer ===
-  PASS: Host can connect and join session
-  PASS: Player receives LOBBY state_sync on join
-  PASS: Anti-cheat — player view omits correct answers
-  ... (27 total)
-=== Results: 27 passed, 0 failed ===
+#### Phase 2 — Socket integration
 
-=== Phase 3: Scoring & Evaluators ===
-  PASS: quiz — all correct indices
-  PASS: truefalse — correct
-  PASS: typeAnswer — exact match
-  PASS: typeAnswer — fuzzy match within 1 edit
-  PASS: slider — exact hit
-  ... (55 total)
-=== Results: 55 passed, 0 failed ===
-```
+- Host and player connect via WebSocket; `client:join` → `state_sync` handshake
+- Anti-cheat: `playerView` strips `correctIndices`, `correctIndex`, `acceptedAnswers`, `correctValue`, `correctOrder`, and `text`
+- Pause/resume freezes and restores the countdown timer
+- `host:skip` from QUESTION_READING → QUESTION_ACTIVE (timer starts); from QUESTION_ACTIVE → RESULTS
+- Simultaneous player answer submission; `host:kick` disconnects the target socket
 
-Total: **152 assertions, 0 failures**.
+#### Phase 3 — Scoring & evaluators
 
-### What each phase tests
-
-#### Phase 2 — Socket integration (`phase2-integration.js`)
-- Host and player connect via WebSocket
-- `client:join` → `state_sync` handshake
-- Anti-cheat: `playerView` strips `correctIndices`, `acceptedAnswers`, etc.
-- Pause/resume freezes and restores timer
-- `host:skip` works from any question state
-- Simultaneous player answers (concurrency)
-- `host:kick` disconnects the target player
-
-#### Phase 3 — Scoring & evaluators (`phase3-scoring.js`)
 - `quiz`: single-correct, multi-correct, partial credit
 - `truefalse`: correct / incorrect
 - `typeAnswer`: exact, fuzzy (≤ 1 Levenshtein), wrong, empty
 - `slider`: exact hit, within tolerance (accuracy score), outside tolerance
 - `puzzle`: correct order, incorrect order, partial
-- Decay formula: `points = round(multiplier × 1000 × (1 − t / 2T))` → 1000 at t=0, 500 at t=T, 0 after
+- Decay formula: `points = round(multiplier × 1000 × max(0, 1 − t / 2T))` → 1000 at t=0, 500 at t=T, 0 after
 - Streak bonuses: 2→+100, 3→+200, 4→+300, 5+→+500
 
-#### Phase 5 — Player client (`phase5-player.js`)
-- Reconnect: player with same nickname rejoins mid-game, score preserved
-- Duplicate nickname blocked while original is still connected
-- Kick: kicked player's WebSocket closes, subsequent events ignored
-- Pause propagates to players as `PAUSED` state_sync
+#### Phase 5 — Player client
 
-#### Phase 6 — Unscored types (`phase6-unscored.js`)
+- Reconnect: player with same nickname rejoins mid-game; score, streak, and history preserved
+- Duplicate nickname blocked while the original socket is still live
+- Kick: kicked player's WebSocket closes; subsequent events from that socket are ignored
+- Pause propagates to all players as `PAUSED` state_sync
+
+#### Phase 6 — Unscored types
+
 - Poll: votes aggregated and broadcast to host
 - Word cloud: words aggregated by frequency
 - Brainstorm: COLLECT phase → `host:reveal` → VOTE phase with upvote counts
 - Open-ended: responses collected, no scoring
 - All unscored answers return `isCorrect: null`, `pointsEarned: 0`
 
-#### Phase 7 — Analytics & report (`phase7-analytics.js`)
+#### Phase 7 — Analytics & report
+
 - Report generated after `host:finish`
-- JSON report: per-question stats, per-player answer history
+- JSON report: per-question stats, per-player answer history with timing
 - CSV report: downloadable with correct headers and row count
-- Knowledge gap flag: questions with < 35% correct rate are flagged
-- Unscored questions (`poll`, `wordcloud`, etc.) never flagged as knowledge gaps
+- Knowledge gap flag: questions with < 35% correct rate are flagged; unscored types never flagged
 - `/api/report/<PIN>/json` and `/api/report/<PIN>/csv` return correct content-type + attachment header
 
-#### Phase 8 — Admin & quiz builder (`phase8-admin.js`)
+#### Phase 8 — Admin & quiz builder
+
 - `POST /api/admin/login` — correct password → 200, wrong → 401
-- `POST /api/admin/quizzes` — requires `x-admin-password` header
-- Quiz JSON written to `data/quizzes/<id>.json`
-- Hot-reload: new quiz immediately appears in `/api/quizzes` catalog
-- Can host a game with the newly created quiz
+- `POST /api/admin/quizzes` — requires `x-admin-password` header; writes to `data/quizzes/<id>.json`
+- Hot-reload: new quiz immediately appears in `/api/quizzes` catalog without restart
 - `GET /api/admin/quiz/:id` — returns full quiz for editing
 - Validation: missing `id` or `items` → 400
-- `DELETE /api/admin/quizzes/:id` — removes file and evicts from catalog
-- `GET /admin` and `/admin/quiz/new` pages render (200)
+- `DELETE /api/admin/quizzes/:id` — removes file and evicts quiz from in-memory catalog
 
 ---
 
@@ -256,13 +303,13 @@ Total: **152 assertions, 0 failures**.
 | Type | Scored | Input widget | How correct is determined |
 |------|--------|-------------|--------------------------|
 | `SLIDE` | — | None (read-only) | N/A |
-| `quiz` | Yes | Multi-select options | All `correctIndices` selected, none wrong |
+| `quiz` | Yes | Multi-select option tiles | All `correctIndices` selected and no wrong index selected |
 | `truefalse` | Yes | True / False buttons | Matches `correctIndex` |
-| `typeAnswer` | Yes | Text input | Levenshtein distance ≤ 1 from any `acceptedAnswers` entry |
-| `slider` | Yes | Range slider | `accuracy = max(0, 1 − |answer − correctValue| / tolerance)` |
-| `puzzle` | Yes | Drag-sort blocks | Submitted order matches `correctOrder` exactly |
-| `poll` | No | Single-select options | No right answer; results aggregated |
-| `wordcloud` | No | Text input (one word) | Aggregated by frequency |
+| `typeAnswer` | Yes | Text input + submit | Levenshtein distance ≤ 1 from any entry in `acceptedAnswers` |
+| `slider` | Yes | Range slider + submit | `accuracy = max(0, 1 − |answer − correctValue| / tolerance)` |
+| `puzzle` | Yes | Drag-sort tiles + submit | Submitted order matches `correctOrder` exactly |
+| `poll` | No | Single-select options | No right answer; results aggregated into bar chart |
+| `wordcloud` | No | Text input (one word) | Aggregated by frequency into word cloud |
 | `brainstorm` | No | Multi-line ideas + upvotes | Two sub-phases: COLLECT then VOTE |
 | `openended` | No | Text area | All responses collected, no evaluation |
 
@@ -272,9 +319,9 @@ Total: **152 assertions, 0 failures**.
 basePoints = round(multiplier × 1000 × max(0, 1 − responseTimeMs / (2 × timeLimitMs)))
 ```
 
-- Perfect answer at t=0 → `multiplier × 1000`
-- Answer at the buzzer (t=timeLimitMs) → `multiplier × 500`
-- After time expires → 0
+- Perfect answer at t=0 → `multiplier × 1000` points
+- Answer exactly at the buzzer (t=timeLimitMs) → `multiplier × 500` points
+- After time expires → 0 points (answer still recorded for the report)
 
 **Streak bonuses** (consecutive correct answers):
 
@@ -295,26 +342,25 @@ The `/admin` interface lets you create and edit quizzes without touching JSON fi
 
 - URL: **http://localhost:3000/admin**
 - Default password: `admin123`
-- Credentials are stored in `sessionStorage` (cleared on tab close)
-- Override the password: `ADMIN_PASSWORD=mypassword npm run dev`
+- Credentials stored in `sessionStorage` (cleared on tab close)
+- Override: `ADMIN_PASSWORD=mypassword npm run dev`
 
 ### Create a quiz
 
 1. Click **New Quiz** → `/admin/quiz/new`
 2. Set a unique **Quiz ID** (becomes the filename: `data/quizzes/<id>.json`)
-3. Add items using the **+ [type]** buttons
-4. Click **Save Quiz** — the quiz is immediately available to host without restart
+3. Add items using the **+ [type]** buttons; fill in question text, time limit, multiplier, and type-specific fields (answer choices, correct answers, slider min/max, etc.)
+4. Click **Save Quiz** — the quiz is immediately available to host without restarting the server
 
 ### Edit a quiz
 
 1. Click the quiz title on the `/admin` dashboard
 2. Modify items, reorder with ▲▼, remove with ✕
-3. Save — overwrites the existing JSON and hot-reloads the engine catalog
+3. Save — overwrites the existing JSON and hot-reloads the in-memory engine catalog
 
 ### Delete a quiz
 
-- Click the trash icon on the `/admin` dashboard
-- The JSON file is deleted and the quiz is evicted from the in-memory catalog
+Click the trash icon on the `/admin` dashboard. The JSON file is deleted and the quiz is evicted from the in-memory catalog immediately.
 
 ---
 
@@ -324,50 +370,51 @@ The `/admin` interface lets you create and edit quizzes without touching JSON fi
 funroot/
 ├── server.js                    # Single entry point: HTTP + WebSocket server
 ├── data/
-│   ├── quizzes/                 # Quiz JSON files (source of truth)
+│   ├── quizzes/                 # Quiz JSON files (source of truth; hand-editable)
 │   │   └── demo-360.json        # Seed quiz covering all 10 item types
-│   ├── snapshots/               # Per-session state snapshots (auto-created)
-│   └── reports/                 # Post-game JSON + CSV reports (auto-created)
+│   ├── snapshots/               # Per-session state snapshots (auto-created, gitignored)
+│   └── reports/                 # Post-game JSON + CSV reports (auto-created, gitignored)
 ├── lib/
 │   ├── engine/
-│   │   ├── GameEngine.js        # Singleton — all in-memory session state
-│   │   ├── stateMachine.js      # Legal status transitions
+│   │   ├── GameEngine.js        # Singleton — all in-memory session state + transition logic
+│   │   ├── stateMachine.js      # Legal status transitions (enforced on every mutation)
 │   │   ├── scoring.js           # Decay formula + streak bonuses
 │   │   ├── SnapshotService.js   # Serialized write queue for safe JSON snapshots
-│   │   ├── TimerService.js      # Per-question countdown with pause support
+│   │   ├── TimerService.js      # Per-question countdown with pause/resume support
 │   │   ├── ReportBuilder.js     # JSON + CSV report generation
 │   │   ├── aggregators.js       # Per-type result aggregation (bar, cloud, notes)
 │   │   └── evaluators/          # Per-type answer evaluators
 │   │       ├── quiz.js
 │   │       ├── truefalse.js
 │   │       ├── typeAnswer.js    # Levenshtein fuzzy match
-│   │       ├── slider.js        # Proximity-based accuracy
+│   │       ├── slider.js        # Proximity-based accuracy scoring
 │   │       └── puzzle.js
 │   └── ws/
-│       ├── contracts.js         # Zod schemas for all WebSocket events
-│       ├── router.js            # Event dispatch: client events → engine
-│       └── socketServer.js      # WebSocket registry + broadcast targeting
+│       ├── contracts.js         # Zod schemas for all WebSocket events (validated before engine)
+│       ├── router.js            # Event dispatch: client events → engine methods
+│       └── socketServer.js      # WebSocket registry + broadcast(pin, event, payload, target)
 ├── hooks/
-│   └── useGameSocket.ts         # React hook — connects, sends join, merges state
+│   └── useGameSocket.ts         # React hook — connects to /ws, merges all server:* events into state
 ├── app/
-│   ├── page.tsx                 # Home: quiz picker + host button
-│   ├── host/[pin]/page.tsx      # Host dashboard (lobby → questions → results)
-│   ├── play/page.tsx            # Player client (join → input widgets → feedback)
+│   ├── page.tsx                 # Home: quiz picker + PIN join form
+│   ├── host/[pin]/page.tsx      # Host dashboard (lobby → questions → results → finished)
+│   ├── play/page.tsx            # Player client (join → input widgets → per-player score feedback)
 │   ├── admin/
 │   │   ├── page.tsx             # Admin dashboard: login + quiz list
-│   │   ├── quiz/new/page.tsx    # New quiz page
-│   │   └── quiz/[id]/page.tsx   # Edit quiz page
+│   │   ├── quiz/new/page.tsx    # New quiz builder
+│   │   └── quiz/[id]/page.tsx   # Edit existing quiz
 │   └── components/
-│       ├── host/QuizBuilder.tsx # Quiz builder with ItemEditor for all 10 types
+│       ├── host/QuizBuilder.tsx # Quiz builder with per-type ItemEditor components
 │       └── charts/              # SVG/Canvas result visualizations
 │           ├── BarChart.tsx
 │           ├── DistributionCurve.tsx
 │           ├── WordCloudCanvas.tsx
 │           └── StickyNotes.tsx
 └── test/
-    ├── phase2-integration.js    # 27 assertions: WebSocket E2E
-    ├── phase3-scoring.js        # 55 assertions: evaluators + scoring
-    ├── phase5-player.js         #  8 assertions: reconnect, kick, pause
+    ├── e2e-browser.js           # 80-assertion E2E suite (Playwright; all 8 suites)
+    ├── phase2-integration.js    # 27 assertions: WebSocket E2E, anti-cheat, pause/resume
+    ├── phase3-scoring.js        # 55 assertions: all evaluators + scoring formula
+    ├── phase5-player.js         #  8 assertions: reconnect, kick, duplicate nickname, pause
     ├── phase6-unscored.js       # 14 assertions: poll, wordcloud, brainstorm, openended
     ├── phase7-analytics.js      # 24 assertions: reports + knowledge gaps
     └── phase8-admin.js          # 24 assertions: admin CRUD + hot-reload
@@ -380,6 +427,6 @@ funroot/
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PORT` | `3000` | HTTP + WebSocket port |
-| `HOST` | `localhost` | Bind address |
+| `HOST` | `localhost` | Bind address (`0.0.0.0` in production) |
 | `NODE_ENV` | `development` | Set to `production` for `npm start` |
-| `ADMIN_PASSWORD` | `admin123` | Password for `/admin` and `x-admin-password` header |
+| `ADMIN_PASSWORD` | `admin123` | Password for `/admin` UI and `x-admin-password` API header |
