@@ -23,8 +23,10 @@
         "He forgot his phone password",
         "He is getting married"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -39,8 +41,10 @@
         "5-star resort",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -55,8 +59,10 @@
         "An empty Swiggy box",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -71,8 +77,10 @@
         "Ask You check?",
         "Go check immediately"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -87,8 +95,10 @@
         "The TV remote",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -103,8 +113,10 @@
         "With a PowerPoint presentation",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -119,8 +131,10 @@
         "Wi-Fi band karti hai",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -135,8 +149,10 @@
         "Full family audit",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -151,8 +167,10 @@
         "Calendar invite bhejo",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -167,8 +185,10 @@
         "Never, it's a myth",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -183,8 +203,10 @@
         "Because Sanjeev Kapoor said so",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -199,8 +221,10 @@
         "Remote to wife",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -215,8 +239,10 @@
         "Mic accidentally on ho gaya",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -231,8 +257,10 @@
         "You are overreacting",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -247,8 +275,10 @@
         "She lost her phone",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -263,8 +293,10 @@
         "Tumse nahi hoga / bas ki nahin",
         "All of the above"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -279,8 +311,10 @@
         "Wife's mood",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -295,8 +329,10 @@
         "Knife eventually gets dull",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -311,8 +347,10 @@
         "Sunday holiday hai",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -327,8 +365,10 @@
         "Main kal se improve karunga",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -343,8 +383,10 @@
         "They only wear T-shirts",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -359,8 +401,10 @@
         "Scientific research",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -375,8 +419,10 @@
         "Caller ID with emotions",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -391,8 +437,10 @@
         "Car wiper",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -407,8 +455,10 @@
         "Manual book",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -423,8 +473,10 @@
         "Meeting cancel hai",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -439,8 +491,10 @@
         "Do I have to cook?",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -455,8 +509,10 @@
         "Bollywood movie",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -471,8 +527,10 @@
         "Best cook in the world",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -487,8 +545,10 @@
         "Wi-Fi",
         "Custom ***"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },

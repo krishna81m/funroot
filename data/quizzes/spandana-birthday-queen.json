@@ -25,9 +25,16 @@
       "orderIndex": 2,
       "type": "quiz",
       "text": "What is Spandana's favorite color?",
-      "options": ["Red", "Blue", "Purple", "Green"],
-      "correctIndices": [2],
-      "timeLimit": 20,
+      "options": [
+        "Red",
+        "Blue",
+        "Purple",
+        "Green"
+      ],
+      "correctIndices": [
+        2
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -36,9 +43,16 @@
       "orderIndex": 3,
       "type": "quiz",
       "text": "What is Spandana's favorite snack?",
-      "options": ["Chips", "Chaat", "Cookies", "Popcorn"],
-      "correctIndices": [1],
-      "timeLimit": 20,
+      "options": [
+        "Chips",
+        "Chaat",
+        "Cookies",
+        "Popcorn"
+      ],
+      "correctIndices": [
+        1
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -47,9 +61,16 @@
       "orderIndex": 4,
       "type": "quiz",
       "text": "What is Spandana's favorite type of game?",
-      "options": ["Video games", "Board games", "Outdoor games", "Mind games with family"],
-      "correctIndices": [1],
-      "timeLimit": 20,
+      "options": [
+        "Video games",
+        "Board games",
+        "Outdoor games",
+        "Mind games with family"
+      ],
+      "correctIndices": [
+        1
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -58,9 +79,16 @@
       "orderIndex": 5,
       "type": "quiz",
       "text": "What is Spandana's favorite hobby?",
-      "options": ["Singing", "Dancing", "Keeping everything clean", "Ignoring the mess"],
-      "correctIndices": [2],
-      "timeLimit": 20,
+      "options": [
+        "Singing",
+        "Dancing",
+        "Keeping everything clean",
+        "Ignoring the mess"
+      ],
+      "correctIndices": [
+        2
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -69,9 +97,16 @@
       "orderIndex": 6,
       "type": "quiz",
       "text": "In one word, Spandana is:",
-      "options": ["Queen", "Boss", "CEO of the home", "All of the above"],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "options": [
+        "Queen",
+        "Boss",
+        "CEO of the home",
+        "All of the above"
+      ],
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -94,8 +129,10 @@
         "Remembering everyone's mistakes from 2014",
         "All of the above"
       ],
-      "correctIndices": [3],
-      "timeLimit": 25,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -111,7 +148,7 @@
         "Somewhere organizing things"
       ],
       "pointsMultiplier": 0,
-      "timeLimit": 20,
+      "timeLimit": 60,
       "mediaUrl": null
     },
     {
@@ -126,7 +163,7 @@
         "Cleaning or home organization ideas"
       ],
       "pointsMultiplier": 0,
-      "timeLimit": 20,
+      "timeLimit": 60,
       "mediaUrl": null
     },
     {
@@ -134,9 +171,16 @@
       "orderIndex": 11,
       "type": "quiz",
       "text": "If Spandana gets two free hours, what will she probably do?",
-      "options": ["Sleep peacefully", "Watch reels", "Play board games", "Clean something nobody noticed"],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "options": [
+        "Sleep peacefully",
+        "Watch reels",
+        "Play board games",
+        "Clean something nobody noticed"
+      ],
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -145,9 +189,16 @@
       "orderIndex": 12,
       "type": "quiz",
       "text": "What is Spandana's shopping style?",
-      "options": ["I need only one thing", "Let's just browse", "This was on sale", "All of the above"],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "options": [
+        "I need only one thing",
+        "Let's just browse",
+        "This was on sale",
+        "All of the above"
+      ],
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -171,7 +222,7 @@
         "Staff loudly singing Happy Birthday"
       ],
       "pointsMultiplier": 0,
-      "timeLimit": 20,
+      "timeLimit": 60,
       "mediaUrl": null
     },
     {
@@ -186,7 +237,7 @@
         "She gives up and does something else"
       ],
       "pointsMultiplier": 0,
-      "timeLimit": 20,
+      "timeLimit": 60,
       "mediaUrl": null
     },
     {
@@ -194,9 +245,14 @@
       "orderIndex": 16,
       "type": "poll",
       "text": "What game does Spandana get secretly competitive about?",
-      "options": ["Uno", "Monopoly", "Board games", "Who made this mess investigation"],
+      "options": [
+        "Uno",
+        "Monopoly",
+        "Board games",
+        "Who made this mess investigation"
+      ],
       "pointsMultiplier": 0,
-      "timeLimit": 20,
+      "timeLimit": 60,
       "mediaUrl": null
     },
     {
@@ -204,9 +260,14 @@
       "orderIndex": 17,
       "type": "poll",
       "text": "During board games, Spandana is most likely to:",
-      "options": ["Play calmly", "Explain the rules properly", "Catch everyone cheating", "Become the silent champion"],
+      "options": [
+        "Play calmly",
+        "Explain the rules properly",
+        "Catch everyone cheating",
+        "Become the silent champion"
+      ],
       "pointsMultiplier": 0,
-      "timeLimit": 20,
+      "timeLimit": 60,
       "mediaUrl": null
     },
     {
@@ -229,7 +290,7 @@
         "Did everyone go to the bathroom?"
       ],
       "pointsMultiplier": 0,
-      "timeLimit": 20,
+      "timeLimit": 60,
       "mediaUrl": null
     },
     {
@@ -237,9 +298,16 @@
       "orderIndex": 20,
       "type": "quiz",
       "text": "What is the family's real emergency alert system?",
-      "options": ["Phone alarm", "WhatsApp group", "Spandana's voice from another room", "Doorbell"],
-      "correctIndices": [2],
-      "timeLimit": 20,
+      "options": [
+        "Phone alarm",
+        "WhatsApp group",
+        "Spandana's voice from another room",
+        "Doorbell"
+      ],
+      "correctIndices": [
+        2
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -248,9 +316,16 @@
       "orderIndex": 21,
       "type": "quiz",
       "text": "What happens when Spandana says, I am not angry?",
-      "options": ["Everything is fine", "She forgot already", "Everyone should panic", "Time to change the topic"],
-      "correctIndices": [2],
-      "timeLimit": 20,
+      "options": [
+        "Everything is fine",
+        "She forgot already",
+        "Everyone should panic",
+        "Time to change the topic"
+      ],
+      "correctIndices": [
+        2
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -259,9 +334,16 @@
       "orderIndex": 22,
       "type": "quiz",
       "text": "What should her husband never try to win?",
-      "options": ["An argument", "TV remote fight", "Shopping budget discussion", "All of the above"],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "options": [
+        "An argument",
+        "TV remote fight",
+        "Shopping budget discussion",
+        "All of the above"
+      ],
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -276,8 +358,10 @@
         "Asking where is it while standing next to it",
         "All of the above"
       ],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -294,9 +378,16 @@
       "orderIndex": 25,
       "type": "quiz",
       "text": "If Spandana had to choose one birthday gift, what would she secretly love most?",
-      "options": ["A clean house", "A relaxing day", "Her favorite chaat", "All family members listening the first time"],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "options": [
+        "A clean house",
+        "A relaxing day",
+        "Her favorite chaat",
+        "All family members listening the first time"
+      ],
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -305,9 +396,16 @@
       "orderIndex": 26,
       "type": "quiz",
       "text": "What would Spandana notice first when entering a room?",
-      "options": ["Decorations", "Food", "Who came late", "What needs cleaning"],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "options": [
+        "Decorations",
+        "Food",
+        "Who came late",
+        "What needs cleaning"
+      ],
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -316,9 +414,16 @@
       "orderIndex": 27,
       "type": "quiz",
       "text": "If Spandana made the rules for the house, Rule #1 would be:",
-      "options": ["Put things back where they belong", "No shoes inside", "Clean as you go", "All of the above"],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "options": [
+        "Put things back where they belong",
+        "No shoes inside",
+        "Clean as you go",
+        "All of the above"
+      ],
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -327,9 +432,16 @@
       "orderIndex": 28,
       "type": "quiz",
       "text": "What is Spandana's love language?",
-      "options": ["Food", "Scolding with care", "Keeping the family organized", "All of the above"],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "options": [
+        "Food",
+        "Scolding with care",
+        "Keeping the family organized",
+        "All of the above"
+      ],
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -338,9 +450,16 @@
       "orderIndex": 29,
       "type": "quiz",
       "text": "Why does everyone love Spandana?",
-      "options": ["She cares deeply", "She keeps everything together", "She makes the family feel loved", "All of the above"],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "options": [
+        "She cares deeply",
+        "She keeps everything together",
+        "She makes the family feel loved",
+        "All of the above"
+      ],
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -349,9 +468,16 @@
       "orderIndex": 30,
       "type": "quiz",
       "text": "What should Spandana get more of this year?",
-      "options": ["Rest", "Fun", "Appreciation", "All of the above"],
-      "correctIndices": [3],
-      "timeLimit": 20,
+      "options": [
+        "Rest",
+        "Fun",
+        "Appreciation",
+        "All of the above"
+      ],
+      "correctIndices": [
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     }

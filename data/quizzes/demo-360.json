@@ -17,9 +17,17 @@
       "orderIndex": 1,
       "type": "quiz",
       "text": "Which planets are gas giants?",
-      "options": ["Mars", "Jupiter", "Saturn", "Venus"],
-      "correctIndices": [1, 2],
-      "timeLimit": 20,
+      "options": [
+        "Mars",
+        "Jupiter",
+        "Saturn",
+        "Venus"
+      ],
+      "correctIndices": [
+        1,
+        2
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -28,9 +36,12 @@
       "orderIndex": 2,
       "type": "truefalse",
       "text": "The Great Wall of China is visible from space with the naked eye.",
-      "options": ["True", "False"],
+      "options": [
+        "True",
+        "False"
+      ],
       "correctIndex": 1,
-      "timeLimit": 15,
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -39,8 +50,11 @@
       "orderIndex": 3,
       "type": "typeAnswer",
       "text": "What is the capital of France?",
-      "acceptedAnswers": ["Paris", "paris"],
-      "timeLimit": 30,
+      "acceptedAnswers": [
+        "Paris",
+        "paris"
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 2,
       "mediaUrl": null
     },
@@ -53,7 +67,7 @@
       "max": 2000,
       "correctValue": 1989,
       "tolerance": 5,
-      "timeLimit": 30,
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -63,13 +77,30 @@
       "type": "puzzle",
       "text": "Order these events chronologically:",
       "blocks": [
-        { "id": 0, "label": "World War I" },
-        { "id": 1, "label": "Moon Landing" },
-        { "id": 2, "label": "Fall of Berlin Wall" },
-        { "id": 3, "label": "COVID-19 Pandemic" }
+        {
+          "id": 0,
+          "label": "World War I"
+        },
+        {
+          "id": 1,
+          "label": "Moon Landing"
+        },
+        {
+          "id": 2,
+          "label": "Fall of Berlin Wall"
+        },
+        {
+          "id": 3,
+          "label": "COVID-19 Pandemic"
+        }
       ],
-      "correctOrder": [0, 1, 2, 3],
-      "timeLimit": 45,
+      "correctOrder": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "timeLimit": 60,
       "pointsMultiplier": 1,
       "mediaUrl": null
     },
@@ -78,9 +109,14 @@
       "orderIndex": 6,
       "type": "poll",
       "text": "Which learning format do you prefer?",
-      "options": ["Video", "Reading", "Hands-on", "Live sessions"],
+      "options": [
+        "Video",
+        "Reading",
+        "Hands-on",
+        "Live sessions"
+      ],
       "pointsMultiplier": 0,
-      "timeLimit": 20,
+      "timeLimit": 60,
       "mediaUrl": null
     },
     {
@@ -89,7 +125,7 @@
       "type": "wordcloud",
       "text": "In one word, how are you feeling today?",
       "pointsMultiplier": 0,
-      "timeLimit": 20,
+      "timeLimit": 60,
       "mediaUrl": null
     },
     {
