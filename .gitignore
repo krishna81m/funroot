@@ -6,3 +6,5 @@ node_modules/
 .env.*
 data/snapshots/
 data/reports/
+logs/
+.vercel

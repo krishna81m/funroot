@@ -11,8 +11,8 @@
 const WebSocket = require('ws')
 const http = require('http')
 
-const BASE = 'http://localhost:3000'
-const WS_URL = 'ws://localhost:3000/ws'
+const BASE = (process.env.BASE_URL || 'http://localhost:3000').replace(/\/$/, '')
+const WS_URL = BASE.replace(/^http/, 'ws') + '/ws'
 
 let pass = 0; let fail = 0
 function assert(cond, msg) {

@@ -10,8 +10,8 @@ const fs = require('fs')
 const path = require('path')
 const os = require('os')
 
-const BASE = 'http://localhost:3000'
-const WS_URL = 'ws://localhost:3000/ws'
+const BASE = (process.env.BASE_URL || 'http://localhost:3000').replace(/\/$/, '')
+const WS_URL = BASE.replace(/^http/, 'ws') + '/ws'
 const REPORT_DIR = path.join(os.tmpdir(), 'kahoot360-reports')
 
 let pass = 0, fail = 0

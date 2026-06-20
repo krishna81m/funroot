@@ -6,6 +6,7 @@ const engine = require('./lib/engine/GameEngine')
 const { REPORT_DIR } = require('./lib/engine/ReportBuilder')
 const fs = require('fs')
 const path = require('path')
+const log = require('./lib/logger')
 
 const QUIZ_DIR = path.join(__dirname, 'data/quizzes')
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123'
@@ -158,7 +159,7 @@ app.prepare().then(() => {
       }
       handle(req, res)
     } catch (err) {
-      console.error('Handler error:', err)
+      log.error('server', `Handler error: ${err.message}`)
       res.statusCode = 500
       res.end('Internal server error')
     }
@@ -185,7 +186,7 @@ app.prepare().then(() => {
   })
 
   server.listen(port, hostname, () => {
-    console.log(`> Ready on http://${hostname}:${port}`)
-    console.log(`> WebSocket endpoint: ws://${hostname}:${port}/ws`)
+    log.info('server', `Ready on http://${hostname}:${port}`)
+    log.info('server', `WebSocket endpoint: ws://${hostname}:${port}/ws`)
   })
 })

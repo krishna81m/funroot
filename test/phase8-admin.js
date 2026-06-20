@@ -11,8 +11,8 @@
 const fs = require('fs')
 const path = require('path')
 
-const BASE = 'http://localhost:3000'
-const ADMIN_PW = 'admin123'
+const BASE = (process.env.BASE_URL || 'http://localhost:3000').replace(/\/$/, '')
+const ADMIN_PW = process.env.ADMIN_PASSWORD || 'admin123'
 const WRONG_PW = 'wrongpassword'
 
 let pass = 0, fail = 0

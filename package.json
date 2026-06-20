@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "NODE_ENV=development node server.js",
     "start": "NODE_ENV=production node server.js",
-    "build": "next build"
+    "build": "next build",
+    "test:api": "for f in test/phase{2,3,5,6,7,8}-*.js; do echo \"--- $f ---\"; node $f; done",
+    "test:e2e": "node test/e2e-browser.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +25,7 @@
   "devDependencies": {
     "@types/node": "^26.0.0",
     "@types/react": "^19.2.17",
+    "playwright": "^1.61.0",
     "typescript": "^6.0.3"
   }
 }
