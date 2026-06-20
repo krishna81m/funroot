@@ -881,6 +881,161 @@ async function suiteMultiPlayerScoring() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// SUITE 9: Mid-Game Join + Comment + Attribution
+// ─────────────────────────────────────────────────────────────────────────────
+async function suiteMidGameJoin() {
+  logLine('\n── Suite 9: Mid-Game Join + Comment + Attribution ─────────')
+  const ws = require('ws')
+
+  const session = await apiPost('/api/sessions', { quizId: 'demo-360' })
+  const pin = session.body?.pin
+  assert(pin?.length === 6, `Created session pin=${pin}`)
+
+  const attributionEvents = []
+  const charlieStateSyncs = []
+
+  await new Promise((resolve, reject) => {
+    // Create host first; only create Alice's socket AFTER host has registered.
+    // This prevents the race where Alice joins before the host is in the WS
+    // registry, which would cause server:player_joined to go nowhere.
+    const hostSock = new ws.WebSocket(`${WS_BASE}/ws`)
+    let aliceSock   = null
+    let charlieSock = null
+
+    function send(sock, event, extra = {}) {
+      try { sock.send(JSON.stringify({ event, payload: { pin, ...extra } })) } catch {}
+    }
+
+    let hostRegistered = false
+    let gameStarted    = false
+    let charlieJoined  = false
+    let aliceAnswered  = false
+    let done           = false
+
+    function finish() {
+      if (done) return
+      done = true
+      try { hostSock.close() } catch {}
+      try { aliceSock?.close() } catch {}
+      try { charlieSock?.close() } catch {}
+      resolve()
+    }
+
+    // ── HOST ──────────────────────────────────────────────────────────────────
+    hostSock.on('open', () => send(hostSock, 'client:join', { role: 'HOST' }))
+    hostSock.on('message', raw => {
+      const { event, payload } = JSON.parse(raw)
+
+      // First host message = host's own join state_sync → host is now registered.
+      // Create Alice's socket here so she always joins AFTER the host.
+      if (!hostRegistered) {
+        hostRegistered = true
+        aliceSock = new ws.WebSocket(`${WS_BASE}/ws`)
+        aliceSock.on('open', () => send(aliceSock, 'client:join', { role: 'PLAYER', nickname: 'Alice' }))
+        aliceSock.on('message', raw2 => {
+          const { event: ev2, payload: pl2 } = JSON.parse(raw2)
+          if (ev2 === 'server:answer_attribution') {
+            attributionEvents.push(pl2)
+            return
+          }
+          if ((ev2 === 'server:state_sync' || ev2 === 'state_sync') && pl2?.status === 'QUESTION_ACTIVE' && pl2?.item?.id && !aliceAnswered) {
+            aliceAnswered = true
+            const qid = pl2.item.id
+            setTimeout(() => send(aliceSock, 'client:submit_answer', {
+              questionId: qid,
+              answer: { selected: [0] },
+              comment: 'Great question!',
+            }), 200)
+          }
+        })
+        aliceSock.on('error', () => {})
+        return
+      }
+
+      // Start game when Alice appears in lobby
+      if (event === 'server:player_joined' && !gameStarted) {
+        const count = payload?.players?.length ?? 0
+        if (count >= 1) {
+          gameStarted = true
+          setTimeout(() => send(hostSock, 'host:start'), 100)
+        }
+        return
+      }
+      if (event === 'server:answer_attribution') {
+        attributionEvents.push(payload)
+        return
+      }
+      if (event !== 'server:state_sync' && event !== 'state_sync') return
+
+      const status = payload?.status
+
+      if (status === 'SLIDE') {
+        setTimeout(() => send(hostSock, 'host:next_item'), 200)
+        return
+      }
+      if (status === 'QUESTION_READING') {
+        // Charlie joins mid-game here (after beginQuestion snapshots participants).
+        // host:skip is inside the guard so it's only scheduled ONCE — the second
+        // QUESTION_READING state_sync triggered by Charlie's addPlayer() must not
+        // schedule another skip (which would race Alice's delayed answer submission).
+        if (!charlieJoined) {
+          charlieJoined = true
+          charlieSock = new ws.WebSocket(`${WS_BASE}/ws`)
+          charlieSock.on('open', () => send(charlieSock, 'client:join', { role: 'PLAYER', nickname: 'Charlie' }))
+          charlieSock.on('message', raw3 => {
+            const { event: ev3, payload: pl3 } = JSON.parse(raw3)
+            if (ev3 === 'server:state_sync' || ev3 === 'state_sync') {
+              charlieStateSyncs.push(pl3)
+            }
+          })
+          charlieSock.on('error', () => {})
+          // Give Charlie time to connect before the question activates
+          setTimeout(() => send(hostSock, 'host:skip'), 700)
+        }
+        return
+      }
+      if (status === 'RESULTS' || status === 'LEADERBOARD') {
+        // Wait for attribution events to propagate, then close up
+        setTimeout(finish, 800)
+      }
+    })
+    hostSock.on('error', reject)
+
+    setTimeout(() => {
+      try { hostSock.close() } catch {}
+      try { aliceSock?.close() } catch {}
+      try { charlieSock?.close() } catch {}
+      reject(new Error('Suite 9: mid-game join timed out'))
+    }, WS_TIMEOUT * 2)
+  })
+
+  // ── Assertions ─────────────────────────────────────────────────────────────
+
+  // Charlie joined mid-game and received an immediate state_sync with game state
+  assert(charlieStateSyncs.length > 0, 'Charlie (mid-game joiner) received state_sync on join')
+  const firstSync = charlieStateSyncs[0]
+  assert(
+    ['QUESTION_READING', 'QUESTION_ACTIVE'].includes(firstSync?.status),
+    `Charlie's first state_sync has active game status (got ${firstSync?.status})`
+  )
+  assert(firstSync?.quizTitle !== undefined, `Charlie's state_sync includes quizTitle (got ${firstSync?.quizTitle})`)
+
+  // Attribution event was broadcast and Alice's comment is included
+  assert(attributionEvents.length > 0, 'server:answer_attribution event was broadcast')
+  const attr = attributionEvents[0]
+  assert(Array.isArray(attr?.answers), 'attribution has answers array')
+
+  const aliceAttr = attr?.answers?.find((a) => a.nickname === 'Alice')
+  assert(aliceAttr !== undefined, 'Alice appears in attribution answers')
+  assert(aliceAttr?.comment === 'Great question!', `Alice's comment preserved in attribution (got ${aliceAttr?.comment})`)
+
+  // Charlie was NOT in questionParticipants (joined after beginQuestion), so auto-advance
+  // should have fired on Alice's answer alone and Charlie's non-answer doesn't block it
+  assert(attr?.answers?.every((a) => a.nickname !== 'Charlie') === true || attr?.answers?.find((a) => a.nickname === 'Charlie') === undefined,
+    'Charlie (late joiner) is not in attribution answers for this question — correct isolation')
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // MAIN
 // ─────────────────────────────────────────────────────────────────────────────
 async function main() {
@@ -922,6 +1077,7 @@ async function main() {
       await suiteReport()
       await suiteWebSocket()
       await suiteMultiPlayerScoring()
+      await suiteMidGameJoin()
     } else {
       logLine('\n── Suite 6: Report API ────────────────────────────────────')
       skip('Report generation requires a completed WS game (not available on this deployment)')
@@ -929,6 +1085,8 @@ async function main() {
       skip('WebSocket not available on this deployment')
       logLine('\n── Suite 8: Multi-Player Score Tracking ───────────────────')
       skip('Score tracking requires WebSocket (not available on this deployment)')
+      logLine('\n── Suite 9: Mid-Game Join + Comment + Attribution ─────────')
+      skip('Mid-game join requires WebSocket (not available on this deployment)')
     }
   } catch (err) {
     logErr('\nFATAL ERROR: ' + err.message)

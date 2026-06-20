@@ -8,6 +8,8 @@ import { StickyNotes } from '../../components/charts/StickyNotes'
 
 type Status = 'LOBBY' | 'SLIDE' | 'QUESTION_READING' | 'QUESTION_ACTIVE' | 'PAUSED' | 'RESULTS' | 'LEADERBOARD' | 'FINISHED'
 
+const UNSCORED_TYPES = new Set(['poll', 'wordcloud', 'brainstorm', 'openended'])
+
 export default function HostDashboard({ params }: { params: Promise<{ pin: string }> }) {
   const { pin } = use(params)
   const { state, send, connected } = useGameSocket({ pin, role: 'HOST' })
@@ -73,11 +75,11 @@ export default function HostDashboard({ params }: { params: Promise<{ pin: strin
         )}
 
         {status === 'RESULTS' && (
-          <ResultsView pin={pin} send={send} item={item} results={state.results} revealActive={state.revealActive} brainstormSubPhase={state.brainstormSubPhase ?? 'COLLECT'} />
+          <ResultsView pin={pin} send={send} item={item} results={state.results} revealActive={state.revealActive} brainstormSubPhase={state.brainstormSubPhase ?? 'COLLECT'} attribution={state.attribution} />
         )}
 
         {status === 'LEADERBOARD' && (
-          <LeaderboardView pin={pin} send={send} leaderboard={state.leaderboard ?? []} />
+          <LeaderboardView pin={pin} send={send} leaderboard={state.leaderboard ?? []} attribution={state.attribution} />
         )}
 
         {status === 'FINISHED' && (
@@ -224,8 +226,8 @@ function PausedView({ pin, send }: { pin: string; send: Function }) {
   )
 }
 
-function ResultsView({ pin, send, item, results, revealActive, brainstormSubPhase }: {
-  pin: string; send: Function; item: any; results: any; revealActive: boolean; brainstormSubPhase: 'COLLECT' | 'VOTE'
+function ResultsView({ pin, send, item, results, revealActive, brainstormSubPhase, attribution }: {
+  pin: string; send: Function; item: any; results: any; revealActive: boolean; brainstormSubPhase: 'COLLECT' | 'VOTE'; attribution: any
 }) {
   const type = item?.type
   const agg = results?.aggregation ?? item?.aggregation
@@ -340,6 +342,11 @@ function ResultsView({ pin, send, item, results, revealActive, brainstormSubPhas
         </div>
       )}
 
+      {/* Attribution — show in RESULTS for unscored types (they don't advance to LEADERBOARD) */}
+      {attribution && UNSCORED_TYPES.has(type) && (
+        <AnswerAttribution attribution={attribution} />
+      )}
+
       <div className="mt-6">
         <HostControls pin={pin} send={send} status="RESULTS" />
       </div>
@@ -347,7 +354,7 @@ function ResultsView({ pin, send, item, results, revealActive, brainstormSubPhas
   )
 }
 
-function LeaderboardView({ pin, send, leaderboard }: { pin: string; send: Function; leaderboard: any[] }) {
+function LeaderboardView({ pin, send, leaderboard, attribution }: { pin: string; send: Function; leaderboard: any[]; attribution: any }) {
   return (
     <div>
       <h2 className="text-3xl font-bold mb-6 text-center">Leaderboard</h2>
@@ -365,7 +372,10 @@ function LeaderboardView({ pin, send, leaderboard }: { pin: string; send: Functi
           </li>
         ))}
       </ol>
-      <div className="flex justify-center">
+      {/* Attribution — show in LEADERBOARD for scored types (RESULTS only lasts 100ms) */}
+      {attribution && <AnswerAttribution attribution={attribution} />}
+
+      <div className="flex justify-center mt-4">
         <HostControls pin={pin} send={send} status="LEADERBOARD" />
       </div>
     </div>
@@ -400,6 +410,76 @@ function FinishedView({ reportUrls, leaderboard }: { reportUrls: any; leaderboar
           >
             Download CSV Report
           </a>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Answer Attribution ─────────────────────────────────────────────────────────
+
+function AnswerAttribution({ attribution }: { attribution: any }) {
+  if (!attribution?.answers?.length) return null
+  const answers: any[] = attribution.answers
+  const correct = answers.filter((a) => a.isCorrect === true)
+  const incorrect = answers.filter((a) => a.isCorrect === false)
+  const unscored = answers.filter((a) => a.isCorrect === null || a.isCorrect === undefined)
+  const withComments = answers.filter((a) => a.comment?.trim())
+
+  return (
+    <div className="mt-6 bg-gray-900 border border-gray-800 rounded-2xl p-5">
+      <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Who answered what</h3>
+
+      {correct.length > 0 && (
+        <div className="mb-4">
+          <p className="text-xs text-green-400 font-semibold mb-2">✓ Correct ({correct.length})</p>
+          <div className="flex flex-wrap gap-2">
+            {correct.map((a) => (
+              <span key={a.nickname} className="bg-green-900/60 border border-green-700 text-green-300 text-xs px-3 py-1.5 rounded-full font-semibold">
+                {a.nickname} <span className="text-green-500">+{a.pointsEarned?.toLocaleString()}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {incorrect.length > 0 && (
+        <div className="mb-4">
+          <p className="text-xs text-red-400 font-semibold mb-2">✗ Incorrect ({incorrect.length})</p>
+          <div className="flex flex-wrap gap-2">
+            {incorrect.map((a) => (
+              <span key={a.nickname} className="bg-red-900/40 border border-red-800 text-red-300 text-xs px-3 py-1.5 rounded-full">
+                {a.nickname}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {unscored.length > 0 && (
+        <div className="mb-4">
+          <p className="text-xs text-indigo-400 font-semibold mb-2">Responded ({unscored.length})</p>
+          <div className="flex flex-wrap gap-2">
+            {unscored.map((a) => (
+              <span key={a.nickname} className="bg-indigo-900/40 border border-indigo-800 text-indigo-300 text-xs px-3 py-1.5 rounded-full">
+                {a.nickname}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {withComments.length > 0 && (
+        <div className="mt-3 pt-3 border-t border-gray-800">
+          <p className="text-xs text-gray-500 font-semibold mb-3">💬 Player thoughts</p>
+          <div className="flex flex-col gap-2">
+            {withComments.map((a) => (
+              <div key={a.nickname} className="flex gap-2 text-sm">
+                <span className="text-gray-500 font-semibold shrink-0">{a.nickname}:</span>
+                <span className="text-gray-300 italic">"{a.comment}"</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

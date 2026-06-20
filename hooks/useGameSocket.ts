@@ -72,6 +72,8 @@ function handleServerEvent(
         // Merge aggregation into item so ResultsView can read it
         item: base.item ? { ...base.item, aggregation: payload.aggregation } : base.item,
       }
+    case 'server:answer_attribution':
+      return { ...base, attribution: payload }
     case 'server:leaderboard':
       return { ...base, leaderboard: payload.top }
     case 'server:player_result':
