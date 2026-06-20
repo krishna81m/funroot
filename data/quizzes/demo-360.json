@@ -1,0 +1,114 @@
+{
+  "id": "demo-360",
+  "title": "Kahoot! 360 Demo",
+  "description": "Exercises every question type in the 360 suite.",
+  "requiresIdentifier": false,
+  "items": [
+    {
+      "id": "slide-1",
+      "orderIndex": 0,
+      "type": "SLIDE",
+      "title": "Welcome to Kahoot! 360",
+      "contentMarkdown": "## Get Ready!\nThis demo covers every question type.",
+      "mediaUrl": null
+    },
+    {
+      "id": "q-quiz-1",
+      "orderIndex": 1,
+      "type": "quiz",
+      "text": "Which planets are gas giants?",
+      "options": ["Mars", "Jupiter", "Saturn", "Venus"],
+      "correctIndices": [1, 2],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q-tf-1",
+      "orderIndex": 2,
+      "type": "truefalse",
+      "text": "The Great Wall of China is visible from space with the naked eye.",
+      "options": ["True", "False"],
+      "correctIndex": 1,
+      "timeLimit": 15,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q-type-1",
+      "orderIndex": 3,
+      "type": "typeAnswer",
+      "text": "What is the capital of France?",
+      "acceptedAnswers": ["Paris", "paris"],
+      "timeLimit": 30,
+      "pointsMultiplier": 2,
+      "mediaUrl": null
+    },
+    {
+      "id": "q-slider-1",
+      "orderIndex": 4,
+      "type": "slider",
+      "text": "In what year did the Berlin Wall fall?",
+      "min": 1950,
+      "max": 2000,
+      "correctValue": 1989,
+      "tolerance": 5,
+      "timeLimit": 30,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q-puzzle-1",
+      "orderIndex": 5,
+      "type": "puzzle",
+      "text": "Order these events chronologically:",
+      "blocks": [
+        { "id": 0, "label": "World War I" },
+        { "id": 1, "label": "Moon Landing" },
+        { "id": 2, "label": "Fall of Berlin Wall" },
+        { "id": 3, "label": "COVID-19 Pandemic" }
+      ],
+      "correctOrder": [0, 1, 2, 3],
+      "timeLimit": 45,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q-poll-1",
+      "orderIndex": 6,
+      "type": "poll",
+      "text": "Which learning format do you prefer?",
+      "options": ["Video", "Reading", "Hands-on", "Live sessions"],
+      "pointsMultiplier": 0,
+      "timeLimit": 20,
+      "mediaUrl": null
+    },
+    {
+      "id": "q-wc-1",
+      "orderIndex": 7,
+      "type": "wordcloud",
+      "text": "In one word, how are you feeling today?",
+      "pointsMultiplier": 0,
+      "timeLimit": 20,
+      "mediaUrl": null
+    },
+    {
+      "id": "q-brain-1",
+      "orderIndex": 8,
+      "type": "brainstorm",
+      "text": "What are your top ideas for improving team collaboration?",
+      "pointsMultiplier": 0,
+      "timeLimit": 60,
+      "mediaUrl": null
+    },
+    {
+      "id": "q-open-1",
+      "orderIndex": 9,
+      "type": "openended",
+      "text": "What is one thing you'd like to learn more about?",
+      "pointsMultiplier": 0,
+      "timeLimit": 60,
+      "mediaUrl": null
+    }
+  ]
+}
