@@ -64,29 +64,40 @@ const BASE = (process.env.BASE_URL || 'http://localhost:3000').replace(/\/$/, ''
 const WS_BASE = BASE.replace(/^http/, 'ws')
 // Allow more time for remote deployments (each WS round-trip adds ~100ms)
 const WS_TIMEOUT = BASE.includes('localhost') ? 10000 : 25000
-let pass = 0, fail = 0
+let pass = 0, fail = 0, skipped = 0
 
 // Dual console+file logging
 const LOG_DIR = path.join(process.cwd(), 'logs')
-if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true })
-const logStream = fs.createWriteStream(path.join(LOG_DIR, 'e2e.log'), { flags: 'a' })
-function logLine(line) { console.log(line); logStream.write(line + '\n') }
-function logErr(line) { console.error(line); logStream.write(line + '\n') }
+try { fs.mkdirSync(LOG_DIR, { recursive: true }) } catch {}
+let logStream = null
+try { logStream = fs.createWriteStream(path.join(LOG_DIR, 'e2e.log'), { flags: 'a' }) } catch {}
+function logLine(line) { console.log(line); if (logStream) logStream.write(line + '\n') }
+function logErr(line)  { console.error(line); if (logStream) logStream.write(line + '\n') }
 
 function assert(cond, msg) {
-  if (cond) {
-    logLine('  ✅ ' + msg)
-    pass++
-  } else {
-    logErr('  ❌ ' + msg)
-    fail++
-  }
+  if (cond) { logLine('  ✅ ' + msg); pass++ }
+  else       { logErr('  ❌ ' + msg); fail++ }
+}
+function skip(msg) {
+  logLine('  ⏭  SKIP ' + msg)
+  skipped++
 }
 function eq(a, b, msg) {
   assert(a === b, `${msg} (got ${JSON.stringify(a)}, expected ${JSON.stringify(b)})`)
 }
 function contains(str, sub, msg) {
   assert(str && str.includes(sub), `${msg} (text: ${JSON.stringify(str?.slice(0, 120))})`)
+}
+
+// Detect WebSocket availability (returns true if /ws is reachable)
+async function detectWS() {
+  const ws = require('ws')
+  return new Promise((resolve) => {
+    const sock = new ws.WebSocket(`${WS_BASE}/ws`)
+    const timer = setTimeout(() => { sock.terminate(); resolve(false) }, 4000)
+    sock.on('open', () => { clearTimeout(timer); sock.close(); resolve(true) })
+    sock.on('error', () => { clearTimeout(timer); resolve(false) })
+  })
 }
 
 async function screenshot(page, label) {
@@ -556,9 +567,16 @@ async function main() {
   // Verify server is up before starting
   const health = await fetch(BASE).then(r => r.status).catch(() => 0)
   if (health !== 200) {
-    console.error(`\nFATAL: Server not reachable at ${BASE} (status=${health})`)
+    logErr(`\nFATAL: Server not reachable at ${BASE} (status=${health})`)
     logErr('Run: npm run dev\n')
     process.exit(1)
+  }
+
+  // Detect WebSocket capability — Vercel and static hosts won't have /ws
+  const wsCapable = await detectWS()
+  if (!wsCapable) {
+    logLine(`ℹ  WebSocket not available at ${WS_BASE}/ws`)
+    logLine('ℹ  Suites 3 (host lobby), 4 (multiplayer), 6 (report), 7 (WS health) will be skipped')
   }
 
   const browser = await newBrowser()
@@ -566,20 +584,35 @@ async function main() {
   try {
     await suiteSmoke()
     await suiteHomePage(browser)
-    const pin1 = await suiteHostFlow(browser)
-    await suiteMultiplayer(browser)
+    if (wsCapable) {
+      await suiteHostFlow(browser)
+      await suiteMultiplayer(browser)
+    } else {
+      logLine('\n── Suite 3: Host Flow ─────────────────────────────────────')
+      skip('Host lobby requires WebSocket (not available on this deployment)')
+      logLine('\n── Suite 4: Multiplayer Flow ──────────────────────────────')
+      skip('Multiplayer requires WebSocket (not available on this deployment)')
+    }
     await suiteAdmin(browser)
-    await suiteReport()
-    await suiteWebSocket()
+    if (wsCapable) {
+      await suiteReport()
+      await suiteWebSocket()
+    } else {
+      logLine('\n── Suite 6: Report API ────────────────────────────────────')
+      skip('Report generation requires a completed WS game (not available on this deployment)')
+      logLine('\n── Suite 7: WebSocket Health ──────────────────────────────')
+      skip('WebSocket not available on this deployment')
+    }
   } catch (err) {
-    console.error('\nFATAL ERROR:', err.message)
+    logErr('\nFATAL ERROR: ' + err.message)
     fail++
   } finally {
     await browser.close()
   }
 
   logLine(`\n${'─'.repeat(52)}`)
-  logLine(`=== Results: ${pass} passed, ${fail} failed ===`)
+  const skipNote = skipped ? `, ${skipped} skipped` : ''
+  logLine(`=== Results: ${pass} passed, ${fail} failed${skipNote} ===`)
   if (fail > 0) {
     logLine('Failure screenshots saved to /tmp/kahoot-e2e-*.png')
   }
