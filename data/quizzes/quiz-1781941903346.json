@@ -1,0 +1,24 @@
+{
+  "id": "quiz-1781941903346",
+  "title": "abc",
+  "description": "test",
+  "requiresIdentifier": false,
+  "items": [
+    {
+      "id": "item-1781941914241-0",
+      "orderIndex": 0,
+      "type": "quiz",
+      "mediaUrl": null,
+      "text": "test",
+      "timeLimit": 30,
+      "pointsMultiplier": 1,
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctIndices": []
+    }
+  ]
+}
