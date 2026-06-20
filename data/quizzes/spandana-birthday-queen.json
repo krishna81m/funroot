@@ -1,0 +1,359 @@
+{
+  "id": "spandana-birthday-queen",
+  "title": "Birthday Queen: How Well Do You Know Spandana?",
+  "description": "Quiz created from game-1.txt, mixing scored multiple-choice questions with unscored crowd-vote prompts where the source text left answers open.",
+  "requiresIdentifier": false,
+  "items": [
+    {
+      "id": "slide-intro",
+      "orderIndex": 0,
+      "type": "SLIDE",
+      "title": "Birthday Queen Kahoot",
+      "contentMarkdown": "## How Well Do You Know Spandana?\nFive rounds of birthday questions, family jokes, and crowd-vote prompts.",
+      "mediaUrl": null
+    },
+    {
+      "id": "slide-round-1",
+      "orderIndex": 1,
+      "type": "SLIDE",
+      "title": "Round 1",
+      "contentMarkdown": "## Easy Warm-Up Questions",
+      "mediaUrl": null
+    },
+    {
+      "id": "q1-favorite-color",
+      "orderIndex": 2,
+      "type": "quiz",
+      "text": "What is Spandana's favorite color?",
+      "options": ["Red", "Blue", "Purple", "Green"],
+      "correctIndices": [2],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q2-favorite-snack",
+      "orderIndex": 3,
+      "type": "quiz",
+      "text": "What is Spandana's favorite snack?",
+      "options": ["Chips", "Chaat", "Cookies", "Popcorn"],
+      "correctIndices": [1],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q3-favorite-game",
+      "orderIndex": 4,
+      "type": "quiz",
+      "text": "What is Spandana's favorite type of game?",
+      "options": ["Video games", "Board games", "Outdoor games", "Mind games with family"],
+      "correctIndices": [1],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q4-favorite-hobby",
+      "orderIndex": 5,
+      "type": "quiz",
+      "text": "What is Spandana's favorite hobby?",
+      "options": ["Singing", "Dancing", "Keeping everything clean", "Ignoring the mess"],
+      "correctIndices": [2],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q5-one-word",
+      "orderIndex": 6,
+      "type": "quiz",
+      "text": "In one word, Spandana is:",
+      "options": ["Queen", "Boss", "CEO of the home", "All of the above"],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "slide-round-2",
+      "orderIndex": 7,
+      "type": "SLIDE",
+      "title": "Round 2",
+      "contentMarkdown": "## Daily Habits and Funny Quirks",
+      "mediaUrl": null
+    },
+    {
+      "id": "q6-superpower",
+      "orderIndex": 8,
+      "type": "quiz",
+      "text": "What is Spandana's real superpower?",
+      "options": [
+        "Multitasking",
+        "Finding missing things everyone else searched for",
+        "Remembering everyone's mistakes from 2014",
+        "All of the above"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 25,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q7-missing-where-look",
+      "orderIndex": 9,
+      "type": "poll",
+      "text": "If Spandana went missing, where should we look first?",
+      "options": [
+        "Shopping aisle, just looking",
+        "Kitchen, checking if everything is clean",
+        "Hiding for 5 minutes of peace",
+        "Somewhere organizing things"
+      ],
+      "pointsMultiplier": 0,
+      "timeLimit": 20,
+      "mediaUrl": null
+    },
+    {
+      "id": "q8-phone-storage",
+      "orderIndex": 10,
+      "type": "poll",
+      "text": "What is most likely taking up space on Spandana's phone?",
+      "options": [
+        "Family photos",
+        "Screenshots she forgot about",
+        "Unread WhatsApp messages",
+        "Cleaning or home organization ideas"
+      ],
+      "pointsMultiplier": 0,
+      "timeLimit": 20,
+      "mediaUrl": null
+    },
+    {
+      "id": "q9-free-hours",
+      "orderIndex": 11,
+      "type": "quiz",
+      "text": "If Spandana gets two free hours, what will she probably do?",
+      "options": ["Sleep peacefully", "Watch reels", "Play board games", "Clean something nobody noticed"],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q10-shopping-style",
+      "orderIndex": 12,
+      "type": "quiz",
+      "text": "What is Spandana's shopping style?",
+      "options": ["I need only one thing", "Let's just browse", "This was on sale", "All of the above"],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "slide-round-3",
+      "orderIndex": 13,
+      "type": "SLIDE",
+      "title": "Round 3",
+      "contentMarkdown": "## Food, Fun and Entertainment",
+      "mediaUrl": null
+    },
+    {
+      "id": "q11-restaurant-nightmare",
+      "orderIndex": 14,
+      "type": "poll",
+      "text": "What is Spandana's worst nightmare at a restaurant?",
+      "options": [
+        "They are out of her favorite snack",
+        "Food is not tasty",
+        "Someone spills something on the table",
+        "Staff loudly singing Happy Birthday"
+      ],
+      "pointsMultiplier": 0,
+      "timeLimit": 20,
+      "mediaUrl": null
+    },
+    {
+      "id": "q12-pick-something-to-watch",
+      "orderIndex": 15,
+      "type": "poll",
+      "text": "How long does it take Spandana to pick something to watch?",
+      "options": [
+        "2 minutes",
+        "10 minutes",
+        "45 minutes, and food gets cold",
+        "She gives up and does something else"
+      ],
+      "pointsMultiplier": 0,
+      "timeLimit": 20,
+      "mediaUrl": null
+    },
+    {
+      "id": "q13-secretly-competitive",
+      "orderIndex": 16,
+      "type": "poll",
+      "text": "What game does Spandana get secretly competitive about?",
+      "options": ["Uno", "Monopoly", "Board games", "Who made this mess investigation"],
+      "pointsMultiplier": 0,
+      "timeLimit": 20,
+      "mediaUrl": null
+    },
+    {
+      "id": "q14-board-games-style",
+      "orderIndex": 17,
+      "type": "poll",
+      "text": "During board games, Spandana is most likely to:",
+      "options": ["Play calmly", "Explain the rules properly", "Catch everyone cheating", "Become the silent champion"],
+      "pointsMultiplier": 0,
+      "timeLimit": 20,
+      "mediaUrl": null
+    },
+    {
+      "id": "slide-round-4",
+      "orderIndex": 18,
+      "type": "SLIDE",
+      "title": "Round 4",
+      "contentMarkdown": "## Family Dynamics",
+      "mediaUrl": null
+    },
+    {
+      "id": "q15-leave-home-phrase",
+      "orderIndex": 19,
+      "type": "poll",
+      "text": "What is Spandana's signature phrase when everyone needs to leave home?",
+      "options": [
+        "We are going to be so late!",
+        "Does anyone have their shoes on?",
+        "I am leaving in two minutes!",
+        "Did everyone go to the bathroom?"
+      ],
+      "pointsMultiplier": 0,
+      "timeLimit": 20,
+      "mediaUrl": null
+    },
+    {
+      "id": "q16-emergency-alert",
+      "orderIndex": 20,
+      "type": "quiz",
+      "text": "What is the family's real emergency alert system?",
+      "options": ["Phone alarm", "WhatsApp group", "Spandana's voice from another room", "Doorbell"],
+      "correctIndices": [2],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q17-not-angry",
+      "orderIndex": 21,
+      "type": "quiz",
+      "text": "What happens when Spandana says, I am not angry?",
+      "options": ["Everything is fine", "She forgot already", "Everyone should panic", "Time to change the topic"],
+      "correctIndices": [2],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q18-husband-never-win",
+      "orderIndex": 22,
+      "type": "quiz",
+      "text": "What should her husband never try to win?",
+      "options": ["An argument", "TV remote fight", "Shopping budget discussion", "All of the above"],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q19-husband-biggest-talent",
+      "orderIndex": 23,
+      "type": "quiz",
+      "text": "Her husband's biggest talent is:",
+      "options": [
+        "Saying I will do it",
+        "Doing it after 7 reminders",
+        "Asking where is it while standing next to it",
+        "All of the above"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "slide-round-5",
+      "orderIndex": 24,
+      "type": "SLIDE",
+      "title": "Round 5",
+      "contentMarkdown": "## Slightly Trickier Questions",
+      "mediaUrl": null
+    },
+    {
+      "id": "q20-birthday-gift",
+      "orderIndex": 25,
+      "type": "quiz",
+      "text": "If Spandana had to choose one birthday gift, what would she secretly love most?",
+      "options": ["A clean house", "A relaxing day", "Her favorite chaat", "All family members listening the first time"],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q21-notice-first",
+      "orderIndex": 26,
+      "type": "quiz",
+      "text": "What would Spandana notice first when entering a room?",
+      "options": ["Decorations", "Food", "Who came late", "What needs cleaning"],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q22-house-rule-1",
+      "orderIndex": 27,
+      "type": "quiz",
+      "text": "If Spandana made the rules for the house, Rule #1 would be:",
+      "options": ["Put things back where they belong", "No shoes inside", "Clean as you go", "All of the above"],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q23-love-language",
+      "orderIndex": 28,
+      "type": "quiz",
+      "text": "What is Spandana's love language?",
+      "options": ["Food", "Scolding with care", "Keeping the family organized", "All of the above"],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q24-why-everyone-loves",
+      "orderIndex": 29,
+      "type": "quiz",
+      "text": "Why does everyone love Spandana?",
+      "options": ["She cares deeply", "She keeps everything together", "She makes the family feel loved", "All of the above"],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q25-more-this-year",
+      "orderIndex": 30,
+      "type": "quiz",
+      "text": "What should Spandana get more of this year?",
+      "options": ["Rest", "Fun", "Appreciation", "All of the above"],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    }
+  ]
+}

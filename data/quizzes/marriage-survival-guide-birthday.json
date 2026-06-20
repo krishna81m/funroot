@@ -1,0 +1,504 @@
+{
+  "id": "marriage-survival-guide-birthday",
+  "title": "The Survival Guide to Marriage Birthday Kahoot!",
+  "description": "Quiz created from game-2.txt, preserving the reordered flow and the host reveal lines for each Custom option.",
+  "requiresIdentifier": false,
+  "items": [
+    {
+      "id": "slide-intro",
+      "orderIndex": 0,
+      "type": "SLIDE",
+      "title": "The Survival Guide to Marriage",
+      "contentMarkdown": "## Birthday Kahoot\nReordered from easy warm-up to couple jokes to husband-survival jokes to final punchline questions.\n\nFor custom punchlines, option D stays at the bottom and the reveal is preserved in each host prompt.",
+      "mediaUrl": null
+    },
+    {
+      "id": "q1-terrified-friend",
+      "orderIndex": 1,
+      "type": "quiz",
+      "text": "Your friend suddenly looks terrified, stressed, and is sweating. What happened?\n\nHost reveal: Something happened to my friend just now... what can it be? He is getting married!",
+      "options": [
+        "He checked his bank balance",
+        "He lost his passport",
+        "He forgot his phone password",
+        "He is getting married"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q2-buy-whatever-you-pick",
+      "orderIndex": 2,
+      "type": "quiz",
+      "text": "Husband promises: Dear, I'll take you out and buy whatever you pick! Where did he take her?\n\nHost reveal: Grocery Store! Technically promise fulfill chesadu.",
+      "options": [
+        "Jewelry showroom",
+        "Luxury car dealership",
+        "5-star resort",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q3-angry-wife-truth",
+      "orderIndex": 3,
+      "type": "quiz",
+      "text": "What is the universal truth behind every angry wife?\n\nHost reveal: There is a husband who has no idea what mistake he did. Reason teliyadu... but sorry already ready.",
+      "options": [
+        "A hungry stomach",
+        "A mother-in-law who agrees with her",
+        "An empty Swiggy box",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q4-door-closed",
+      "orderIndex": 4,
+      "type": "quiz",
+      "text": "It is very late, everyone is asleep, and wife asks: Door closed? What should husband do?\n\nHost reveal: Marriage survival rule: don't answer. Verify.",
+      "options": [
+        "Say I think so",
+        "Say Maybe",
+        "Ask You check?",
+        "Go check immediately"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q5-never-take-away",
+      "orderIndex": 5,
+      "type": "quiz",
+      "text": "What is the absolute best thing a husband should never take away from his wife?\n\nHost reveal: Domination, limelight, attention, comfort. It's not your fault guys... just let her have the limelight!",
+      "options": [
+        "Her credit card",
+        "Her advice on directions",
+        "The TV remote",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q6-convince-your-wife",
+      "orderIndex": 6,
+      "type": "quiz",
+      "text": "How do you convince your wife?\n\nHost reveal: Accept defeat early. Smart husbands don't argue. They say: correct hai, next topic please.",
+      "options": [
+        "With logic",
+        "With evidence",
+        "With a PowerPoint presentation",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q7-pyaar-andha",
+      "orderIndex": 7,
+      "type": "quiz",
+      "text": "They say Pyaar andha hai. What does shaadi do?\n\nHost reveal: Shaadi aankhein khol degi. Andha bhi nahi tha... meri aankhein kyon kholi?",
+      "options": [
+        "Aur andha banati hai",
+        "Free glasses deti hai",
+        "Wi-Fi band karti hai",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q8-arrange-marriage-gives",
+      "orderIndex": 8,
+      "type": "quiz",
+      "text": "Love marriage gives 6 months to know each other. Arrange marriage gives...\n\nHost reveal: Samajh mein na le. By the time you understand, return window close ho jaata hai.",
+      "options": [
+        "6 minutes",
+        "6 relatives",
+        "Full family audit",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q9-saturday-sunday",
+      "orderIndex": 9,
+      "type": "quiz",
+      "text": "Husband says, Let's enjoy Saturday and Sunday. Wife says...\n\nHost reveal: Pakka, fir Monday ko milte hain.",
+      "options": [
+        "Pakka",
+        "First finish chores",
+        "Calendar invite bhejo",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q10-wife-haar",
+      "orderIndex": 10,
+      "type": "quiz",
+      "text": "Wife haar kab maanti hai?\n\nHost reveal: Jab haar sone ka ho!",
+      "options": [
+        "Jab woh thak jaati hai",
+        "Jab pati rone lagta hai",
+        "Never, it's a myth",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q11-cooking-meant-for-men",
+      "orderIndex": 11,
+      "type": "quiz",
+      "text": "Dad joke alert: Why is cooking meant for men, not women?\n\nHost reveal: Because it is called Coo-KING, not Coo-QUEEN.",
+      "options": [
+        "Because fire is dangerous",
+        "Because men love food more",
+        "Because Sanjeev Kapoor said so",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q12-authority-transferred",
+      "orderIndex": 12,
+      "type": "quiz",
+      "text": "After marriage, authority transferred from...\n\nHost reveal: Father to Wife. Previously dad approval. Now wife approval.",
+      "options": [
+        "Boss to HR",
+        "Government to wife",
+        "Remote to wife",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q13-first-time-shaant",
+      "orderIndex": 13,
+      "type": "quiz",
+      "text": "First time he met her, she was ek dam shaant. Now husband hardly talks. What is he thinking?\n\nHost reveal: Laapata Ladies ka transfer toh nahi ho gaya? First time shaant, all meets shaant... then daanting premium version activated.",
+      "options": [
+        "I should listen more",
+        "She is expressing love",
+        "Mic accidentally on ho gaya",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q14-safest-response",
+      "orderIndex": 14,
+      "type": "quiz",
+      "text": "If wife starts daanting, safest husband response is...\n\nHost reveal: Sorry, reason teliyadu but sorry. Har baat galat kaise ho sakti hai... but sorry first.",
+      "options": [
+        "Nenu emi cheyaledu",
+        "Let me explain",
+        "You are overreacting",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q15-happy-when-we-go-out",
+      "orderIndex": 15,
+      "type": "quiz",
+      "text": "Husband says: She is happy when we go out, gives me me-time, respects me, gives me space, and doesn't check my mobile. What is the reality?\n\nHost reveal: Page ratta kiya — shantham ga cheppu. Did I forget anything?",
+      "options": [
+        "True love",
+        "He is dreaming",
+        "She lost her phone",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q16-work-for-husbands",
+      "orderIndex": 16,
+      "type": "quiz",
+      "text": "Work for husbands means...\n\nHost reveal: Husband job description: do work, redo work, then get feedback.",
+      "options": [
+        "Lazy",
+        "100 kaam",
+        "Tumse nahi hoga / bas ki nahin",
+        "All of the above"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q17-happy-married-life",
+      "orderIndex": 17,
+      "type": "quiz",
+      "text": "Happy married life depends on compassion, compatibility, and adjustment between wife and...\n\nHost reveal: Your wife and your wife's other mood. Two people: wife and wife's mood.",
+      "options": [
+        "Husband",
+        "In-laws",
+        "Wife's mood",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q18-wife-vs-knife",
+      "orderIndex": 18,
+      "type": "quiz",
+      "text": "What is the main difference between arguing with your wife and arguing with a knife?\n\nHost reveal: One of them has a point.",
+      "options": [
+        "Knife is sharper",
+        "You can hide a knife",
+        "Knife eventually gets dull",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q19-bathing-defense",
+      "orderIndex": 19,
+      "type": "quiz",
+      "text": "Wives complain husbands don't even know how to bathe. What is husband's defense?\n\nHost reveal: Hum 10 minute mein do baar naha sakte hain! Fundamentals changed after marriage: nahana bhi audit mein aa gaya.",
+      "options": [
+        "We are saving environment",
+        "Soap expensive hai",
+        "Sunday holiday hai",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q20-ladko-ko-nahana",
+      "orderIndex": 20,
+      "type": "quiz",
+      "text": "Wife says: Lagta hai ladko ko nahana hi nahi aata. What should husband say?\n\nHost reveal: Isko bhi sikha do. Husband training program never ends.",
+      "options": [
+        "Main expert hoon",
+        "YouTube video bhejo",
+        "Main kal se improve karunga",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q21-folding-clothes-waste",
+      "orderIndex": 21,
+      "type": "quiz",
+      "text": "Why do husbands think folding clothes is waste of time?\n\nHost reveal: Kholke pehente ho, kholke dhote ho, toh ye origami kahan se aaya?",
+      "options": [
+        "Wardrobe is too small",
+        "Wrinkles are new fashion",
+        "They only wear T-shirts",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q22-rectangle-shape",
+      "orderIndex": 22,
+      "type": "quiz",
+      "text": "Husband's logic on folding clothes: Sirf rectangle ek shape hai kya?\n\nHost reveal: Jagah bachta hai? Lao, daba dunga. Ghar kabhi saaf nahi ho sakta... but husband has compression algorithm.",
+      "options": [
+        "Good geometry question",
+        "Laundry innovation",
+        "Scientific research",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q23-wifes-gps",
+      "orderIndex": 23,
+      "type": "quiz",
+      "text": "Wife's GPS system is also called...\n\nHost reveal: Home Security System. GPS, spy cheeze, safe and protective — location on, escape impossible.",
+      "options": [
+        "Google Maps",
+        "Spy satellite",
+        "Caller ID with emotions",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q24-protection-level",
+      "orderIndex": 24,
+      "type": "quiz",
+      "text": "Wife's protection level is like...\n\nHost reveal: Kevlar bulletproof. Safe, secure, fully monitored.",
+      "options": [
+        "Normal lock",
+        "Doorbell",
+        "Car wiper",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q25-relationship-preparation",
+      "orderIndex": 25,
+      "type": "quiz",
+      "text": "Aadmi log relationship preparation leke aate hain like...\n\nHost reveal: Gola barood. Car vs car wiper, bell vs caller ID — husband thinks simple, wife has full system.",
+      "options": [
+        "Flowers",
+        "Chocolates",
+        "Manual book",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q26-shaadi-ki-parampara",
+      "orderIndex": 26,
+      "type": "quiz",
+      "text": "Shaadi ki parampara: husband and wife solve problems together. But wife forgot to say...\n\nHost reveal: Problems baad mein aate hain. Before marriage: no problems. After marriage: joint problem-solving program.",
+      "options": [
+        "Husband hi problem hai",
+        "Solution wife ke paas hai",
+        "Meeting cancel hai",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q27-secret-palace-option-b",
+      "orderIndex": 27,
+      "type": "quiz",
+      "text": "Option A: Live in a secret palace with your wife for 6 months without internet. Option B?\n\nHost reveal: I'll take Option B, whatever it is.",
+      "options": [
+        "Can I bring my friends?",
+        "What is the Wi-Fi password?",
+        "Do I have to cook?",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q28-aisi-marriage",
+      "orderIndex": 28,
+      "type": "quiz",
+      "text": "Aisi marriage ko kya bolte hain jo cute ho, sweet ho, brilliant ho, intelligent ho, always understanding ho?\n\nHost reveal: Brahm, vahm, maya, asambhav, improbable, imaginative.",
+      "options": [
+        "Relationship goals",
+        "Match made in heaven",
+        "Bollywood movie",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q29-meet-my-wife",
+      "orderIndex": 29,
+      "type": "quiz",
+      "text": "Introduction time: Hi friends... meet my wife. She is the...\n\nHost reveal: My solutions annitiki problem — sorry, my problems annitiki solution. Corrected before wife corrects me.",
+      "options": [
+        "Queen of my heart",
+        "Boss of the house",
+        "Best cook in the world",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "q30-final-truth",
+      "orderIndex": 30,
+      "type": "quiz",
+      "text": "Final truth: Wife's problems annitiki reason evaru?\n\nHost reveal: Husband. Nenu emi cheyaledu... but sorry.",
+      "options": [
+        "Neighbors",
+        "Kids",
+        "Wi-Fi",
+        "Custom ***"
+      ],
+      "correctIndices": [3],
+      "timeLimit": 20,
+      "pointsMultiplier": 1,
+      "mediaUrl": null
+    },
+    {
+      "id": "slide-closing",
+      "orderIndex": 31,
+      "type": "SLIDE",
+      "title": "Final Closing Line",
+      "contentMarkdown": "Before marriage, naaku annitiki solutions unnayi ani anukunna. After marriage, naa problems annitiki solution naa wife ani telisindi... and naa wife problems annitiki reason nene ani kuda telisindi!",
+      "mediaUrl": null
+    }
+  ]
+}

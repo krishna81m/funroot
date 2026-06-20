@@ -62,6 +62,7 @@ if (!CHROME) {
 // ── Test harness ──────────────────────────────────────────────────────────────
 const BASE = (process.env.BASE_URL || 'http://localhost:3000').replace(/\/$/, '')
 const WS_BASE = BASE.replace(/^http/, 'ws')
+const QUIZ_ID = process.env.QUIZ_ID || 'demo-360'
 // Allow more time for remote deployments (each WS round-trip adds ~100ms)
 const WS_TIMEOUT = BASE.includes('localhost') ? 10000 : 25000
 let pass = 0, fail = 0, skipped = 0
@@ -150,7 +151,7 @@ async function suiteSmoke() {
   eq(quizzes.status, 200, 'GET /api/quizzes → 200')
   assert(Array.isArray(quizzes.body) && quizzes.body.length > 0, '/api/quizzes returns non-empty array')
 
-  const session = await apiPost('/api/sessions', { quizId: 'demo-360' })
+  const session = await apiPost('/api/sessions', { quizId: QUIZ_ID })
   eq(session.status, 200, 'POST /api/sessions → 200')
   assert(session.body?.pin?.length === 6, 'Session PIN is 6 digits')
 
@@ -887,7 +888,7 @@ async function suiteMidGameJoin() {
   logLine('\n── Suite 9: Mid-Game Join + Comment + Attribution ─────────')
   const ws = require('ws')
 
-  const session = await apiPost('/api/sessions', { quizId: 'demo-360' })
+  const session = await apiPost('/api/sessions', { quizId: QUIZ_ID })
   const pin = session.body?.pin
   assert(pin?.length === 6, `Created session pin=${pin}`)
 
@@ -1041,6 +1042,7 @@ async function suiteMidGameJoin() {
 async function main() {
   logLine('=== Kahoot! 360 — E2E Browser Regression Suite ===')
   logLine(`Target: ${BASE}`)
+  logLine(`Quiz: ${QUIZ_ID}`)
   logLine(`Browser: ${CHROME}`)
 
   // Verify server is up before starting
