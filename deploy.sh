@@ -362,8 +362,25 @@ main() {
   report_status "$local_status" "$vercel_status" "$render_status"
 
   # Exit with appropriate code
-  if [ "$local_status" -eq 0 ] && [ "$vercel_status" -eq 0 ] && [ "$render_status" -eq 0 ]; then
-    log_success "All deployments and tests passed!"
+  local failed=0
+
+  # Check local (if not skipped)
+  if [ "$SKIP_LOCAL_TEST" -eq 0 ] && [ "$local_status" -ne 0 ]; then
+    failed=1
+  fi
+
+  # Check Vercel (if deployed)
+  if [ "$DEPLOY_VERCEL" -eq 1 ] && [ "$SKIP_REMOTE_TEST" -eq 0 ] && [ "$vercel_status" -ne 0 ]; then
+    failed=1
+  fi
+
+  # Check Render (if deployed)
+  if [ "$DEPLOY_RENDER" -eq 1 ] && [ "$SKIP_REMOTE_TEST" -eq 0 ] && [ "$render_status" -ne 0 ]; then
+    failed=1
+  fi
+
+  if [ "$failed" -eq 0 ]; then
+    log_success "All configured deployments and tests passed!"
     exit 0
   else
     log_error "One or more deployments/tests failed"
