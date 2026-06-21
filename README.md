@@ -1,4 +1,4 @@
-# Kahoot! 360
+# funroot 360
 
 An enterprise-grade interactive quiz platform built with Next.js 16 (App Router), Tailwind CSS v4, and a custom Node.js WebSocket server — all in a single process, no database required.
 
@@ -123,7 +123,7 @@ Open at least two browser windows — one for the **host**, one or more for **pl
 ### Step 1 — Host: Create a Session
 
 1. Navigate to **http://localhost:3000**
-2. Click **Host →** next to the `Kahoot! 360 Demo` quiz
+2. Click **Host →** next to the `funroot 360 Demo` quiz
 3. You land on `/host/<PIN>` — the lobby screen showing a 6-digit PIN
 4. Share the PIN or the displayed join URL (`/play?pin=<PIN>`) with players
 

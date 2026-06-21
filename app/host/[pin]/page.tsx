@@ -386,7 +386,7 @@ function FinishedView({ reportUrls, leaderboard }: { reportUrls: any; leaderboar
   return (
     <div className="text-center mt-8">
       <h2 className="text-4xl font-extrabold mb-2">Game Over!</h2>
-      <p className="text-gray-400 mb-8">Thanks for playing Kahoot! 360</p>
+      <p className="text-gray-400 mb-8">Thanks for playing funroot 360</p>
 
       {leaderboard.length > 0 && (
         <div className="mb-8">

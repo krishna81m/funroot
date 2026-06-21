@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Kahoot! 360',
+  title: 'funroot 360',
   description: 'Enterprise interactive quiz platform',
 }
 

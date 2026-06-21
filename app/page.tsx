@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-10 p-8">
-      <h1 className="text-5xl font-extrabold tracking-tight">Kahoot! 360</h1>
+      <h1 className="text-5xl font-extrabold tracking-tight">funroot 360</h1>
 
       {/* Join section */}
       <div className="flex gap-2">

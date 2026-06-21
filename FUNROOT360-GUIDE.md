@@ -1,6 +1,6 @@
-# Kahoot! 360 — Complete Operator & Player Guide
+# funroot 360 — Complete Operator & Player Guide
 
-This guide covers every capability of Kahoot! 360: hosting a game, playing as a participant,
+This guide covers every capability of funroot 360: hosting a game, playing as a participant,
 administering quizzes, downloading reports, and verifying everything with the test suite —
 for all three deployment environments.
 
@@ -77,11 +77,11 @@ The lobby shows:
 ### 1.4 Starting the game
 
 Click **Start Game**. The host dashboard transitions through items in sequence.
-The demo quiz (`Kahoot! 360 Demo`) contains one of every question type:
+The demo quiz (`funroot 360 Demo`) contains one of every question type:
 
 | # | Type | Title / Question |
 |---|------|-----------------|
-| 1 | SLIDE | Welcome to Kahoot! 360 |
+| 1 | SLIDE | Welcome to funroot 360 |
 | 2 | quiz | Which planets are gas giants? (20 s) |
 | 3 | truefalse | The Great Wall of China is visible from space… (15 s) |
 | 4 | typeAnswer | What is the capital of France? (30 s) |
@@ -431,7 +431,7 @@ This is a complete host + 3 player run-through of the demo quiz.
 ### Setup
 
 **Host (browser A):** Open `http://localhost:3000` → click **Host →** next to
-"Kahoot! 360 Demo". Note the PIN (e.g., `123456`).
+"funroot 360 Demo". Note the PIN (e.g., `123456`).
 
 **Players (browsers B, C, D):** Each opens `http://localhost:3000/play` → enters PIN `123456` →
 enters a unique nickname → clicks **Join**.

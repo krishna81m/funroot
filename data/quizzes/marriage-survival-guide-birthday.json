@@ -1,6 +1,6 @@
 {
   "id": "marriage-survival-guide-birthday",
-  "title": "The Survival Guide to Marriage Birthday Kahoot!",
+  "title": "The Survival Guide to Marriage Birthday funroot!",
   "description": "Quiz created from game-2.txt, preserving the reordered flow and the host reveal lines for each Custom option.",
   "requiresIdentifier": false,
   "items": [
@@ -9,7 +9,7 @@
       "orderIndex": 0,
       "type": "SLIDE",
       "title": "The Survival Guide to Marriage",
-      "contentMarkdown": "## Birthday Kahoot\nReordered from easy warm-up to couple jokes to husband-survival jokes to final punchline questions.\n\nFor custom punchlines, option D stays at the bottom and the reveal is preserved in each host prompt.",
+      "contentMarkdown": "## Birthday funroot\nReordered from easy warm-up to couple jokes to husband-survival jokes to final punchline questions.\n\nFor custom punchlines, option D stays at the bottom and the reveal is preserved in each host prompt.",
       "mediaUrl": null
     },
     {

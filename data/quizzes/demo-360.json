@@ -1,6 +1,6 @@
 {
   "id": "demo-360",
-  "title": "Kahoot! 360 Demo",
+  "title": "funroot 360 Demo",
   "description": "Exercises every question type in the 360 suite.",
   "requiresIdentifier": false,
   "items": [
@@ -8,7 +8,7 @@
       "id": "slide-1",
       "orderIndex": 0,
       "type": "SLIDE",
-      "title": "Welcome to Kahoot! 360",
+      "title": "Welcome to funroot 360",
       "contentMarkdown": "## Get Ready!\nThis demo covers every question type.",
       "mediaUrl": null
     },

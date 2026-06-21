@@ -1,5 +1,5 @@
 /**
- * Kahoot! 360 — End-to-End Browser Regression Suite
+ * funroot 360 — End-to-End Browser Regression Suite
  *
  * Drives a real Chromium/Chrome browser via Playwright to verify the full
  * golden path from the homepage through a complete game session.
@@ -174,11 +174,11 @@ async function suiteHomePage(browser) {
   await page.waitForTimeout(2000)
 
   const title = await page.title()
-  contains(title, 'Kahoot', 'Page title contains "Kahoot"')
+  contains(title, 'funroot', 'Page title contains "funroot"')
 
   // React must hydrate and fetch /api/quizzes
-  const quizCard = await waitFor(page, 'text=Kahoot! 360 Demo')
-  assert(quizCard !== null, 'Quiz card "Kahoot! 360 Demo" appears after hydration')
+  const quizCard = await waitFor(page, 'text=funroot 360 Demo')
+  assert(quizCard !== null, 'Quiz card "funroot 360 Demo" appears after hydration')
 
   const hostBtn = await waitFor(page, 'text=Host →')
   assert(hostBtn !== null, '"Host →" button is visible')
@@ -414,7 +414,7 @@ async function suiteAdmin(browser) {
     await page.waitForTimeout(2000)
     const afterLogin = await page.evaluate(() => document.body.innerText)
     const loggedIn = afterLogin.includes('New Quiz') || afterLogin.includes('demo-360') ||
-                     afterLogin.includes('Kahoot') || afterLogin.includes('Quiz')
+                     afterLogin.includes('funroot') || afterLogin.includes('Quiz')
     assert(loggedIn, 'Admin login succeeds and shows quiz dashboard')
     await screenshot(page, 'admin-dashboard')
   } else {
@@ -1048,7 +1048,7 @@ async function suiteMidGameJoin() {
 // MAIN
 // ─────────────────────────────────────────────────────────────────────────────
 async function main() {
-  logLine('=== Kahoot! 360 — E2E Browser Regression Suite ===')
+  logLine('=== funroot 360 — E2E Browser Regression Suite ===')
   logLine(`Target: ${BASE}`)
   logLine(`Quiz: ${QUIZ_ID}`)
   logLine(`Browser: ${CHROME}`)
