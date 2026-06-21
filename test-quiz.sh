@@ -8,7 +8,7 @@
 QUIZ_ID="${1:-demo-360}"
 BASE_URL="${BASE_URL:-http://localhost:3000}"
 
-echo "🎮 Kahoot! 360 Quiz Test"
+echo "🎮 funroot 360 Quiz Test"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "Target: $BASE_URL"
 echo "Quiz:   $QUIZ_ID"
