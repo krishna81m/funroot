@@ -211,7 +211,13 @@ run_test() {
       return 1
     fi
 
-    if BASE_URL="$base_url" QUIZ_ID="$QUIZ_ID" timeout 600 ./test-quiz.sh "$QUIZ_ID" >> "$log_file" 2>&1; then
+    # Use timeout if available (Linux), otherwise run without it (macOS)
+    local cmd="BASE_URL=\"$base_url\" QUIZ_ID=\"$QUIZ_ID\" ./test-quiz.sh \"$QUIZ_ID\""
+    if command -v timeout &> /dev/null; then
+      cmd="timeout 600 $cmd"
+    fi
+
+    if eval "$cmd" >> "$log_file" 2>&1; then
       log_success "[$service] Tests passed"
       return 0
     else
