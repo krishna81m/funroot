@@ -29,7 +29,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/demo-360/q-quiz-1.webp"
     },
     {
       "id": "q-tf-1",

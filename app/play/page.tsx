@@ -318,7 +318,10 @@ function ActiveQuestion({ item, pin, timeRemaining, send }: {
   const type: QuestionType = item.type
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white flex flex-col">
+    <main
+      className="min-h-screen bg-gray-950 text-white flex flex-col bg-cover bg-center"
+      style={item.background ? { backgroundImage: `linear-gradient(rgba(2,6,23,0.85), rgba(2,6,23,0.85)), url(${item.background})` } : undefined}
+    >
       {/* Timer bar */}
       {item.timeLimit && (
         <div className="h-1 bg-gray-800">

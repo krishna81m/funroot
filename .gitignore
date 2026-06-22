@@ -8,3 +8,6 @@ data/snapshots/
 data/reports/
 logs/
 .vercel
+
+# Local-only ML experiment harness (not committed)
+tier2-experiments/

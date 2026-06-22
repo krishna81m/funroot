@@ -157,7 +157,10 @@ function QuestionView({ pin, send, item, status, timeRemaining, tally }: {
 
   return (
     <div>
-      <div className="bg-gray-800 p-8 rounded-2xl mb-4">
+      <div
+        className="bg-gray-800 p-8 rounded-2xl mb-4 bg-cover bg-center"
+        style={item?.background ? { backgroundImage: `linear-gradient(rgba(17,24,39,0.82), rgba(17,24,39,0.82)), url(${item.background})` } : undefined}
+      >
         <div className="flex items-center justify-between mb-4">
           <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 bg-indigo-950 px-3 py-1 rounded-full">
             {item?.type}
