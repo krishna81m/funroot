@@ -10,7 +10,8 @@
       "type": "SLIDE",
       "title": "The Survival Guide to Marriage",
       "contentMarkdown": "## Birthday funroot\nReordered from easy warm-up to couple jokes to husband-survival jokes to final punchline questions.\n\nFor custom punchlines, option D stays at the bottom and the reveal is preserved in each host prompt.",
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/slide-intro.webp"
     },
     {
       "id": "q1-terrified-friend",
@@ -28,7 +29,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q1-terrified-friend.webp"
     },
     {
       "id": "q2-buy-whatever-you-pick",
@@ -46,7 +48,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q2-buy-whatever-you-pick.webp"
     },
     {
       "id": "q3-angry-wife-truth",
@@ -64,7 +67,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q3-angry-wife-truth.webp"
     },
     {
       "id": "q4-door-closed",
@@ -82,7 +86,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q4-door-closed.webp"
     },
     {
       "id": "q5-never-take-away",
@@ -100,7 +105,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q5-never-take-away.webp"
     },
     {
       "id": "q6-convince-your-wife",
@@ -118,7 +124,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q6-convince-your-wife.webp"
     },
     {
       "id": "q7-pyaar-andha",
@@ -136,7 +143,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q7-pyaar-andha.webp"
     },
     {
       "id": "q8-arrange-marriage-gives",
@@ -154,7 +162,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q8-arrange-marriage-gives.webp"
     },
     {
       "id": "q9-saturday-sunday",
@@ -172,7 +181,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q9-saturday-sunday.webp"
     },
     {
       "id": "q10-wife-haar",
@@ -190,7 +200,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q10-wife-haar.webp"
     },
     {
       "id": "q11-cooking-meant-for-men",
@@ -208,7 +219,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q11-cooking-meant-for-men.webp"
     },
     {
       "id": "q12-authority-transferred",
@@ -226,7 +238,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q12-authority-transferred.webp"
     },
     {
       "id": "q13-first-time-shaant",
@@ -244,7 +257,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q13-first-time-shaant.webp"
     },
     {
       "id": "q14-safest-response",
@@ -262,7 +276,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q14-safest-response.webp"
     },
     {
       "id": "q15-happy-when-we-go-out",
@@ -280,7 +295,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q15-happy-when-we-go-out.webp"
     },
     {
       "id": "q16-work-for-husbands",
@@ -298,7 +314,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/marriage-survival-guide-birthday/q16-work-for-husbands.webp"
     },
     {
       "id": "q17-happy-married-life",

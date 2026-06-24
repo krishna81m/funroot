@@ -10,7 +10,8 @@
       "type": "SLIDE",
       "title": "Welcome to funroot 360",
       "contentMarkdown": "## Get Ready!\nThis demo covers every question type.",
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/demo-360/slide-1.webp"
     },
     {
       "id": "q-quiz-1",
@@ -44,7 +45,8 @@
       "correctIndex": 1,
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/demo-360/q-tf-1.webp"
     },
     {
       "id": "q-type-1",
@@ -57,7 +59,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 2,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/demo-360/q-type-1.webp"
     },
     {
       "id": "q-slider-1",
@@ -70,7 +73,8 @@
       "tolerance": 5,
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/demo-360/q-slider-1.webp"
     },
     {
       "id": "q-puzzle-1",
@@ -103,7 +107,8 @@
       ],
       "timeLimit": 60,
       "pointsMultiplier": 1,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/demo-360/q-puzzle-1.webp"
     },
     {
       "id": "q-poll-1",
@@ -118,7 +123,8 @@
       ],
       "pointsMultiplier": 0,
       "timeLimit": 60,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/demo-360/q-poll-1.webp"
     },
     {
       "id": "q-wc-1",
@@ -127,7 +133,8 @@
       "text": "In one word, how are you feeling today?",
       "pointsMultiplier": 0,
       "timeLimit": 60,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/demo-360/q-wc-1.webp"
     },
     {
       "id": "q-brain-1",
@@ -136,7 +143,8 @@
       "text": "What are your top ideas for improving team collaboration?",
       "pointsMultiplier": 0,
       "timeLimit": 60,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/demo-360/q-brain-1.webp"
     },
     {
       "id": "q-open-1",
@@ -145,7 +153,8 @@
       "text": "What is one thing you'd like to learn more about?",
       "pointsMultiplier": 0,
       "timeLimit": 60,
-      "mediaUrl": null
+      "mediaUrl": null,
+      "background": "/backgrounds/demo-360/q-open-1.webp"
     }
   ]
 }
